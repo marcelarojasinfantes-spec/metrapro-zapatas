@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Test MetraPro</title>
+<script src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
+<style>
+body{font-family:Arial,sans-serif;background:#5A1B85;color:#fff;padding:20px;margin:0}
+h1{font-size:20px;margin-bottom:10px}
+.estado{background:rgba(255,255,255,0.1);padding:14px;border-radius:6px;margin-bottom:14px;font-size:13px}
+.ok{color:#A0F4B8;font-weight:bold}
+.err{color:#FFB0B0;font-weight:bold}
+button{background:#E87722;color:#fff;border:none;padding:10px 16px;border-radius:6px;font-size:13px;cursor:pointer;font-weight:bold;width:100%}
+button:hover{background:#FF8A33}
+</style>
+</head>
+<body>
+<h1>🏗 Test MetraPro</h1>
+
+<div class="estado" id="estado">
+<div>Verificando entorno...</div>
+</div>
+
+<button onclick="probarExcel()">Probar escribir en celda activa</button>
+
+<div class="estado" id="resultado" style="margin-top:14px"></div>
+
+<script>
+const estado = document.getElementById('estado');
+const resultado = document.getElementById('resultado');
+
+let info = [];
+info.push('User-Agent: ' + navigator.userAgent.substring(0,80));
+info.push('---');
+
+if (typeof Office === 'undefined') {
+  info.push('<span class="err">✗ Office.js NO cargado</span>');
+  estado.innerHTML = info.join('<br>');
+} else {
+  info.push('<span class="ok">✓ Office.js cargado</span>');
+  
+  Office.onReady(function(infoOffice) {
+    info.push('<span class="ok">✓ Office.onReady ejecutado</span>');
+    info.push('Host: ' + (infoOffice.host || 'desconocido'));
+    info.push('Plataforma: ' + (infoOffice.platform || 'desconocido'));
+    
+    if (typeof Excel !== 'undefined') {
+      info.push('<span class="ok">✓ Excel API disponible</span>');
+    } else {
+      info.push('<span class="err">✗ Excel API NO disponible</span>');
+    }
+    
+    estado.innerHTML = info.join('<br>');
+  });
+}
+
+async function probarExcel() {
+  resultado.innerHTML = '<span class="ok">Ejecutando...</span>';
+  try {
+    await Excel.run(async (context) => {
+      const cell = context.workbook.getActiveCell();
+      cell.values = [['¡FUNCIONA! ✓']];
+      cell.format.fill.color = '#5A1B85';
+      cell.format.font.color = '#FFFFFF';
+      cell.format.font.bold = true;
+      await context.sync();
+    });
+    resultado.innerHTML = '<span class="ok">✓ Escrito en celda activa</span>';
+  } catch (err) {
+    resultado.innerHTML = '<span class="err">✗ Error: ' + (err.message || err) + '</span>';
+  }
+}
+</script>
+</body>
+</html>
