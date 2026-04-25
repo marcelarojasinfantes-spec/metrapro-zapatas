@@ -286,7 +286,7 @@
                     const tituloRange = sheet.getRange('C3:P3');
                     tituloRange.unmerge();
                     tituloRange.merge();
-                    tituloRange.values = [['SUSTENTO DE METRADOS']];
+                    sheet.getRange('C3').values = [['SUSTENTO DE METRADOS']];
                     tituloRange.format.font.bold = true;
                     tituloRange.format.font.size = 14;
                     tituloRange.format.horizontalAlignment = 'Center';
@@ -299,7 +299,7 @@
                     const proyRange = sheet.getRange('D6:P6');
                     proyRange.unmerge();
                     proyRange.merge();
-                    proyRange.values = [[proyecto]];
+                    sheet.getRange('D6').values = [[proyecto]];
                     proyRange.format.wrapText = true;
                     proyRange.format.verticalAlignment = 'Center';
 
@@ -311,10 +311,9 @@
                     sheet.getRange('C8').format.font.bold = true;
                     sheet.getRange('D9').values = [[fechaFormateada]];
 
-                    const r13 = sheet.getRange('A13:Q13');
-                    r13.unmerge();
-                    const r14 = sheet.getRange('A14:Q14');
-                    r14.unmerge();
+                    const headerRange = sheet.getRange('A13:Q14');
+                    headerRange.unmerge();
+                    headerRange.clear();
 
                     sheet.getRange('A13:A14').merge();
                     sheet.getRange('C13:C14').merge();
@@ -327,21 +326,25 @@
                     sheet.getRange('P13:P14').merge();
                     sheet.getRange('Q13:Q14').merge();
 
-                    const headersFila13 = [
-                        ['', '', 'ITEM', 'DESCRIPCIÓN', 'Und', 'Elem. Simil.',
-                            'DIMENSIONES', '', '', 'Nº de Veces',
-                            'METRADO', '', '', '', '', 'Total', 'AVANCE']
-                    ];
-                    sheet.getRange('A13:Q13').values = headersFila13;
+                    sheet.getRange('C13').values = [['ITEM']];
+                    sheet.getRange('D13').values = [['DESCRIPCIÓN']];
+                    sheet.getRange('E13').values = [['Und']];
+                    sheet.getRange('F13').values = [['Elem. Simil.']];
+                    sheet.getRange('G13').values = [['DIMENSIONES']];
+                    sheet.getRange('J13').values = [['Nº de Veces']];
+                    sheet.getRange('K13').values = [['METRADO']];
+                    sheet.getRange('P13').values = [['Total']];
+                    sheet.getRange('Q13').values = [['AVANCE']];
 
-                    const headersFila14 = [
-                        ['', '', '', '', '', '',
-                            'Largo', 'Ancho', 'Alto', '',
-                            'Lon.', 'Área', 'Vol.', 'Kg.', 'Und.', '', '']
-                    ];
-                    sheet.getRange('A14:Q14').values = headersFila14;
+                    sheet.getRange('G14').values = [['Largo']];
+                    sheet.getRange('H14').values = [['Ancho']];
+                    sheet.getRange('I14').values = [['Alto']];
+                    sheet.getRange('K14').values = [['Lon.']];
+                    sheet.getRange('L14').values = [['Área']];
+                    sheet.getRange('M14').values = [['Vol.']];
+                    sheet.getRange('N14').values = [['Kg.']];
+                    sheet.getRange('O14').values = [['Und.']];
 
-                    const headerRange = sheet.getRange('A13:Q14');
                     headerRange.format.font.bold = true;
                     headerRange.format.horizontalAlignment = 'Center';
                     headerRange.format.verticalAlignment = 'Center';
@@ -363,12 +366,26 @@
 
                     sheet.freezePanes.freezeAt(sheet.getRange('D17'));
 
+                    const printArea = sheet.getRange('A1:Q200');
+                    sheet.pageLayout.setPrintArea(printArea);
+                    sheet.pageLayout.orientation = 'Landscape';
+                    sheet.pageLayout.paperSize = 'A4';
+                    sheet.pageLayout.topMargin = 36;
+                    sheet.pageLayout.bottomMargin = 36;
+                    sheet.pageLayout.leftMargin = 36;
+                    sheet.pageLayout.rightMargin = 36;
+                    sheet.pageLayout.headerMargin = 18;
+                    sheet.pageLayout.footerMargin = 18;
+                    sheet.pageLayout.zoom = { scale: 85 };
+                    sheet.pageLayout.setPrintTitleRows('$1:$14');
+                    sheet.pageLayout.centerHorizontally = true;
+
                     sheet.getRange('A18').select();
 
                     await context.sync();
                 });
 
-                mostrarStatus('Hoja creada correctamente. Puedes empezar a metrar desde la fila 18.', 'success');
+                mostrarStatus('Hoja creada correctamente. Lista para metrar desde fila 18, configurada para impresión A4 horizontal.', 'success');
                 btn.textContent = 'Generar hoja';
                 btn.disabled = false;
 
