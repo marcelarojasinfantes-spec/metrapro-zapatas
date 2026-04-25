@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetraPro · Crear hoja de metrado</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #FAFAF7;
+            color: #2C2C2A;
+            padding: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .header {
+            border-bottom: 1px solid #E5E3DC;
+            padding-bottom: 12px;
+            margin-bottom: 16px;
+        }
+        .header h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3C3489;
+            margin-bottom: 4px;
+        }
+        .header p {
+            font-size: 12px;
+            color: #6B6A65;
+        }
+        .form-group {
+            margin-bottom: 14px;
+        }
+        label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #2C2C2A;
+            margin-bottom: 5px;
+        }
+        label .req {
+            color: #C53030;
+            margin-left: 2px;
+        }
+        input[type="text"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #D3D1C7;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            color: #2C2C2A;
+            background: white;
+            transition: border-color 0.15s;
+        }
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #3C3489;
+            box-shadow: 0 0 0 2px rgba(60, 52, 137, 0.1);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+        .hint {
+            font-size: 11px;
+            color: #888780;
+            margin-top: 3px;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+            padding-top: 14px;
+            border-top: 1px solid #E5E3DC;
+        }
+        button {
+            flex: 1;
+            padding: 9px 14px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: #3C3489;
+            color: white;
+            border-color: #3C3489;
+        }
+        .btn-primary:hover {
+            background: #2D2569;
+        }
+        .btn-primary:disabled {
+            background: #B4B2A9;
+            border-color: #B4B2A9;
+            cursor: not-allowed;
+        }
+        .btn-secondary {
+            background: white;
+            color: #5F5E5A;
+            border-color: #D3D1C7;
+        }
+        .btn-secondary:hover {
+            background: #F5F4EE;
+        }
+        .status {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: none;
+        }
+        .status.success {
+            background: #E6F4EA;
+            color: #1B5E20;
+            border: 1px solid #C0E1C8;
+            display: block;
+        }
+        .status.error {
+            background: #FCE8E6;
+            color: #B71C1C;
+            border: 1px solid #F5C6CB;
+            display: block;
+        }
+        .status.info {
+            background: #E6F1FB;
+            color: #0C447C;
+            border: 1px solid #B5D4F4;
+            display: block;
+        }
+        .warning-box {
+            background: #FEF7E6;
+            border: 1px solid #F4D06F;
+            border-radius: 4px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: #6B4D03;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Crear hoja de metrado</h1>
+        <p>Genera el encabezado de proyecto y la cabecera de tabla en la hoja activa</p>
+    </div>
+
+    <div class="warning-box">
+        <strong>Atención:</strong> El encabezado se insertará en la hoja activa. Si la hoja ya tiene contenido en las primeras 16 filas, será sobrescrito.
+    </div>
+
+    <div class="form-group">
+        <label for="proyecto">Proyecto <span class="req">*</span></label>
+        <input type="text" id="proyecto" placeholder='Ej: "CONSTRUCCIÓN DE CALZADA, AV. JAVIER PRADO"' />
+        <div class="hint">Nombre completo del proyecto, en mayúsculas y entre comillas</div>
+    </div>
+
+    <div class="form-group">
+        <label for="propietario">Propietario <span class="req">*</span></label>
+        <input type="text" id="propietario" placeholder="Ej: MUNICIPALIDAD METROPOLITANA DE LIMA" />
+        <div class="hint">Entidad o persona dueña del proyecto</div>
+    </div>
+
+    <div class="form-group">
+        <label for="fecha">Fecha <span class="req">*</span></label>
+        <input type="date" id="fecha" />
+        <div class="hint">Se mostrará en formato "DD/Mes/AAAA"</div>
+    </div>
+
+    <div class="actions">
+        <button type="button" class="btn-secondary" id="btnLimpiar">Limpiar</button>
+        <button type="button" class="btn-primary" id="btnGenerar">Generar hoja</button>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <script>
+        let officeReady = false;
+
+        Office.onReady(function (info) {
+            officeReady = true;
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            document.getElementById('fecha').value = `${yyyy}-${mm}-${dd}`;
+
+            document.getElementById('btnGenerar').addEventListener('click', generarHoja);
+            document.getElementById('btnLimpiar').addEventListener('click', limpiarFormulario);
+        });
+
+        function limpiarFormulario() {
+            document.getElementById('proyecto').value = '';
+            document.getElementById('propietario').value = '';
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            document.getElementById('fecha').value = `${yyyy}-${mm}-${dd}`;
+            ocultarStatus();
+        }
+
+        function mostrarStatus(mensaje, tipo) {
+            const el = document.getElementById('status');
+            el.className = 'status ' + tipo;
+            el.textContent = mensaje;
+        }
+
+        function ocultarStatus() {
+            const el = document.getElementById('status');
+            el.className = 'status';
+            el.textContent = '';
+        }
+
+        function formatearFecha(fechaISO) {
+            const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+            const partes = fechaISO.split('-');
+            const yyyy = partes[0];
+            const mm = parseInt(partes[1], 10);
+            const dd = partes[2];
+            return `${dd}/${meses[mm - 1]}/${yyyy}`;
+        }
+
+        async function generarHoja() {
+            ocultarStatus();
+
+            const proyecto = document.getElementById('proyecto').value.trim();
+            const propietario = document.getElementById('propietario').value.trim();
+            const fechaInput = document.getElementById('fecha').value;
+
+            if (!proyecto || !propietario || !fechaInput) {
+                mostrarStatus('Completa todos los campos antes de generar la hoja.', 'error');
+                return;
+            }
+
+            const fechaFormateada = formatearFecha(fechaInput);
+            const btn = document.getElementById('btnGenerar');
+            btn.disabled = true;
+            btn.textContent = 'Generando...';
+            mostrarStatus('Construyendo encabezado en la hoja activa...', 'info');
+
+            try {
+                await Excel.run(async (context) => {
+                    const sheet = context.workbook.worksheets.getActiveWorksheet();
+
+                    const anchos = {
+                        'A': 2.57, 'B': 4.0, 'C': 14.14, 'D': 77.86,
+                        'E': 5.57, 'F': 7.29, 'G': 10.71, 'H': 12.29,
+                        'I': 9.43, 'J': 7.14, 'K': 8.29, 'L': 10.0,
+                        'M': 8.0, 'N': 7.0, 'O': 6.86, 'P': 11.0, 'Q': 10.43
+                    };
+
+                    for (const col in anchos) {
+                        const colRange = sheet.getRange(col + ':' + col);
+                        colRange.format.columnWidth = anchos[col] * 7;
+                    }
+
+                    sheet.getRange('1:1').format.rowHeight = 15;
+                    sheet.getRange('2:2').format.rowHeight = 15;
+                    sheet.getRange('3:3').format.rowHeight = 15;
+                    sheet.getRange('4:4').format.rowHeight = 5.1;
+                    sheet.getRange('5:5').format.rowHeight = 5.1;
+                    sheet.getRange('6:6').format.rowHeight = 45.75;
+                    sheet.getRange('7:7').format.rowHeight = 15;
+                    sheet.getRange('8:8').format.rowHeight = 15;
+                    sheet.getRange('9:9').format.rowHeight = 15;
+                    sheet.getRange('10:10').format.rowHeight = 15;
+                    sheet.getRange('11:11').format.rowHeight = 5.1;
+                    sheet.getRange('12:12').format.rowHeight = 5.1;
+                    sheet.getRange('13:13').format.rowHeight = 15;
+                    sheet.getRange('14:14').format.rowHeight = 14.25;
+                    sheet.getRange('15:15').format.rowHeight = 13.5;
+                    sheet.getRange('16:16').format.rowHeight = 12.75;
+
+                    const tituloRange = sheet.getRange('C3:P3');
+                    tituloRange.unmerge();
+                    tituloRange.merge();
+                    tituloRange.values = [['SUSTENTO DE METRADOS']];
+                    tituloRange.format.font.bold = true;
+                    tituloRange.format.font.size = 14;
+                    tituloRange.format.horizontalAlignment = 'Center';
+                    tituloRange.format.verticalAlignment = 'Center';
+
+                    sheet.getRange('C6').values = [['Proyecto     :']];
+                    sheet.getRange('C6').format.font.bold = true;
+                    sheet.getRange('C6').format.verticalAlignment = 'Center';
+
+                    const proyRange = sheet.getRange('D6:P6');
+                    proyRange.unmerge();
+                    proyRange.merge();
+                    proyRange.values = [[proyecto]];
+                    proyRange.format.wrapText = true;
+                    proyRange.format.verticalAlignment = 'Center';
+
+                    sheet.getRange('C7').values = [['Propietario   :']];
+                    sheet.getRange('C7').format.font.bold = true;
+                    sheet.getRange('D7').values = [[propietario]];
+
+                    sheet.getRange('C8').values = [['Fecha          :']];
+                    sheet.getRange('C8').format.font.bold = true;
+                    sheet.getRange('D9').values = [[fechaFormateada]];
+
+                    const r13 = sheet.getRange('A13:Q13');
+                    r13.unmerge();
+                    const r14 = sheet.getRange('A14:Q14');
+                    r14.unmerge();
+
+                    sheet.getRange('A13:A14').merge();
+                    sheet.getRange('C13:C14').merge();
+                    sheet.getRange('D13:D14').merge();
+                    sheet.getRange('E13:E14').merge();
+                    sheet.getRange('F13:F14').merge();
+                    sheet.getRange('G13:I13').merge();
+                    sheet.getRange('J13:J14').merge();
+                    sheet.getRange('K13:O13').merge();
+                    sheet.getRange('P13:P14').merge();
+                    sheet.getRange('Q13:Q14').merge();
+
+                    const headersFila13 = [
+                        ['', '', 'ITEM', 'DESCRIPCIÓN', 'Und', 'Elem. Simil.',
+                            'DIMENSIONES', '', '', 'Nº de Veces',
+                            'METRADO', '', '', '', '', 'Total', 'AVANCE']
+                    ];
+                    sheet.getRange('A13:Q13').values = headersFila13;
+
+                    const headersFila14 = [
+                        ['', '', '', '', '', '',
+                            'Largo', 'Ancho', 'Alto', '',
+                            'Lon.', 'Área', 'Vol.', 'Kg.', 'Und.', '', '']
+                    ];
+                    sheet.getRange('A14:Q14').values = headersFila14;
+
+                    const headerRange = sheet.getRange('A13:Q14');
+                    headerRange.format.font.bold = true;
+                    headerRange.format.horizontalAlignment = 'Center';
+                    headerRange.format.verticalAlignment = 'Center';
+                    headerRange.format.wrapText = true;
+
+                    sheet.getRange('D13').format.horizontalAlignment = 'Left';
+
+                    const bordeArriba = sheet.getRange('A13:Q13').format.borders.getItem('EdgeTop');
+                    bordeArriba.style = 'Continuous';
+                    bordeArriba.weight = 'Medium';
+
+                    const bordeAbajo = sheet.getRange('A14:Q14').format.borders.getItem('EdgeBottom');
+                    bordeAbajo.style = 'Continuous';
+                    bordeAbajo.weight = 'Medium';
+
+                    const bordeMedio = sheet.getRange('A13:Q13').format.borders.getItem('EdgeBottom');
+                    bordeMedio.style = 'Continuous';
+                    bordeMedio.weight = 'Hairline';
+
+                    sheet.freezePanes.freezeAt(sheet.getRange('D17'));
+
+                    sheet.getRange('A18').select();
+
+                    await context.sync();
+                });
+
+                mostrarStatus('Hoja creada correctamente. Puedes empezar a metrar desde la fila 18.', 'success');
+                btn.textContent = 'Generar hoja';
+                btn.disabled = false;
+
+            } catch (error) {
+                mostrarStatus('Error: ' + (error.message || 'No se pudo generar la hoja'), 'error');
+                btn.textContent = 'Generar hoja';
+                btn.disabled = false;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
