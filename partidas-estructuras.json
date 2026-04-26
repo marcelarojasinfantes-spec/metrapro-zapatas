@@ -1,299 +1,1431 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "fecha_actualizacion": "2026-04-26",
   "norma": "RD 073-2010-VIVIENDA / E.060",
   "especialidad": "Estructuras (OE.2)",
   "metodos_calculo": {
     "und_cant": {
       "nombre": "Unidad — Cantidad simple",
-      "campos": ["cantidad", "veces"],
-      "formula": "=F{r}*J{r}",
-      "memoria": "{cantidad} × {veces} = {total} {unidad}"
+      "campos": [
+        "cantidad",
+        "veces"
+      ],
+      "formula": "=F{r}*J{r}"
     },
     "m_largo": {
       "nombre": "Longitud — Largo directo",
-      "campos": ["cantidad", "largo", "veces"],
-      "formula": "=F{r}*G{r}*J{r}",
-      "memoria": "{cantidad} × {largo} m × {veces} = {total} m"
+      "campos": [
+        "cantidad",
+        "largo",
+        "veces"
+      ],
+      "formula": "=F{r}*G{r}*J{r}"
     },
     "m2_largo_ancho": {
       "nombre": "Área — Largo × Ancho",
-      "campos": ["cantidad", "largo", "ancho", "veces"],
-      "formula": "=F{r}*G{r}*H{r}*J{r}",
-      "memoria": "{cantidad} × {largo} × {ancho} × {veces} = {total} m²"
+      "campos": [
+        "cantidad",
+        "largo",
+        "ancho",
+        "veces"
+      ],
+      "formula": "=F{r}*G{r}*H{r}*J{r}"
     },
     "m2_perimetro_alt": {
-      "nombre": "Área — Perímetro × Altura: 2(L+A)×H",
-      "campos": ["cantidad", "largo", "ancho", "alto", "veces"],
-      "formula": "=F{r}*2*(G{r}+H{r})*I{r}*J{r}",
-      "memoria": "{cantidad} × 2({largo}+{ancho}) × {alto} × {veces} = {total} m²"
+      "nombre": "Área — Perímetro × Altura",
+      "campos": [
+        "cantidad",
+        "largo",
+        "ancho",
+        "alto",
+        "veces"
+      ],
+      "formula": "=F{r}*2*(G{r}+H{r})*I{r}*J{r}"
     },
     "m2_lateral": {
-      "nombre": "Área — Encofrado lateral solo (perímetro × altura sin tapas)",
-      "campos": ["cantidad", "largo", "ancho", "alto", "veces"],
-      "formula": "=F{r}*(2*G{r}+2*H{r})*I{r}*J{r}",
-      "memoria": "{cantidad} × (2×{largo}+2×{ancho}) × {alto} × {veces} = {total} m²"
+      "nombre": "Área — Encofrado lateral",
+      "campos": [
+        "cantidad",
+        "largo",
+        "ancho",
+        "alto",
+        "veces"
+      ],
+      "formula": "=F{r}*(2*G{r}+2*H{r})*I{r}*J{r}"
     },
     "m3_l_a_h": {
       "nombre": "Volumen — Largo × Ancho × Alto",
-      "campos": ["cantidad", "largo", "ancho", "alto", "veces"],
-      "formula": "=F{r}*G{r}*H{r}*I{r}*J{r}",
-      "memoria": "{cantidad} × {largo} × {ancho} × {alto} × {veces} = {total} m³"
+      "campos": [
+        "cantidad",
+        "largo",
+        "ancho",
+        "alto",
+        "veces"
+      ],
+      "formula": "=F{r}*G{r}*H{r}*I{r}*J{r}"
     },
     "m3_area_esp": {
-      "nombre": "Volumen — Área × Espesor (losas, pavimentos)",
-      "campos": ["cantidad", "largo", "ancho", "alto", "veces"],
-      "formula": "=F{r}*G{r}*H{r}*I{r}*J{r}",
-      "memoria": "{cantidad} × {largo}×{ancho} × {alto} × {veces} = {total} m³"
+      "nombre": "Volumen — Área × Espesor",
+      "campos": [
+        "cantidad",
+        "largo",
+        "ancho",
+        "alto",
+        "veces"
+      ],
+      "formula": "=F{r}*G{r}*H{r}*I{r}*J{r}"
     },
     "kg_acero": {
       "nombre": "Acero — Cantidad × Largo × peso/m",
-      "campos": ["cantidad", "largo", "veces", "diametro"],
-      "formula": "=F{r}*G{r}*{peso}*J{r}",
-      "memoria": "{cantidad} × {largo} m × {peso} kg/m × {veces} = {total} kg"
-    },
-    "glb": {
-      "nombre": "Global — Solo cantidad",
-      "campos": ["cantidad"],
-      "formula": "=F{r}",
-      "memoria": "{cantidad} glb"
+      "campos": [
+        "cantidad",
+        "largo",
+        "veces",
+        "diametro"
+      ],
+      "formula": "=F{r}*G{r}*0.560*J{r}"
     }
   },
-  "categorias": [
+  "elementos": [
+    {
+      "codigo": "OE.2",
+      "descripcion": "ESTRUCTURAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
     {
       "codigo": "OE.2.1",
-      "nombre": "Movimiento de Tierras",
-      "color": "#FAEEDA",
-      "color_texto": "#854F0B"
+      "descripcion": "MOVIMIENTO DE TIERRAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.1",
+      "descripcion": "NIVELACIÓN DE TERRENO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.1.1",
+      "descripcion": "NIVELACIÓN INTERIOR Y APISONADO",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.1.1.2",
+      "descripcion": "NIVELACIÓN EXTERIOR Y APISONADO",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.1.2",
+      "descripcion": "EXCAVACIONES",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.2.1",
+      "descripcion": "EXCAVACIÓN MASIVA EN TERRENO NORMAL",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.2.2",
+      "descripcion": "EXCAVACIÓN MASIVA EN TERRENO ROCOSO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.2.3",
+      "descripcion": "EXCAVACIÓN PARA ZAPATAS EN TERRENO NORMAL",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.2.4",
+      "descripcion": "EXCAVACIÓN DE ZANJAS PARA CIMIENTOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.2.5",
+      "descripcion": "EXCAVACIÓN DE ZANJAS PARA TUBERÍAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.2.6",
+      "descripcion": "EXCAVACIÓN DE ZANJAS PARA INST. SANITARIAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.2.7",
+      "descripcion": "EXCAVACIÓN MANUAL EN TERRENO NORMAL",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.3",
+      "descripcion": "CORTES",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.3.1",
+      "descripcion": "CORTE EN TERRENO NORMAL",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.3.2",
+      "descripcion": "CORTE EN TERRENO ROCOSO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.4",
+      "descripcion": "REFINE Y NIVELACIÓN DE FONDOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.4.1",
+      "descripcion": "REFINE Y NIVELACIÓN DE FONDO DE ZANJAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.1.4.2",
+      "descripcion": "REFINE DE TALUDES",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.1.5",
+      "descripcion": "RELLENOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.5.1",
+      "descripcion": "RELLENO COMPACTADO CON MATERIAL PROPIO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.5.2",
+      "descripcion": "RELLENO COMPACTADO CON MATERIAL DE PRÉSTAMO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.5.3",
+      "descripcion": "RELLENO COMPACTADO CON HORMIGÓN",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.5.4",
+      "descripcion": "RELLENO COMPACTADO CON AFIRMADO E=0.10m",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.1.5.5",
+      "descripcion": "RELLENO COMPACTADO CON ARENA FINA E=10cm",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.1.6",
+      "descripcion": "ELIMINACIÓN DE MATERIAL EXCEDENTE",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.6.1",
+      "descripcion": "ELIMINACIÓN DE MATERIAL EXCEDENTE D<5km",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.6.2",
+      "descripcion": "ELIMINACIÓN DE MATERIAL EXCEDENTE C/EQUIPO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.6.3",
+      "descripcion": "ACARREO DE MATERIAL PROPIO HASTA 20m",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.6.4",
+      "descripcion": "BAJADA DE MATERIAL POR DUCTOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.1.7",
+      "descripcion": "TABLAESTACADO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.1.7.1",
+      "descripcion": "TABLAESTACADO PARA EXCAVACIONES DE ZANJAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
     },
     {
       "codigo": "OE.2.2",
-      "nombre": "Obras de Concreto Simple",
-      "color": "#E1F5EE",
-      "color_texto": "#085041"
+      "descripcion": "OBRAS DE CONCRETO SIMPLE",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.1",
+      "descripcion": "CIMIENTOS CORRIDOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.1.1",
+      "descripcion": "CONCRETO 1:10 + 30% PG EN CIMIENTOS CORRIDOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.1.2",
+      "descripcion": "CONCRETO f'c=100 kg/cm² + 30% PG EN CIMIENTOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.1.3",
+      "descripcion": "CONCRETO 1:8 + 30% PG EN CIMIENTOS CORRIDOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.2",
+      "descripcion": "SUB ZAPATAS O FALSA ZAPATA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.2.1",
+      "descripcion": "CONCRETO 1:12 EN SUB ZAPATAS / FALSA ZAPATA",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.2.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN SUB ZAPATAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.2.3",
+      "descripcion": "SOLADOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.3.1",
+      "descripcion": "SOLADO PARA ZAPATAS E=2', MEZCLA 1:12",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.2.4",
+      "descripcion": "BASES DE CONCRETO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.4.1",
+      "descripcion": "BASE DE CONCRETO f'c=140 kg/cm²",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.2.4.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN BASES",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.2.5",
+      "descripcion": "ESTRUCTURAS DE SOSTENIMIENTO DE EXCAVACIONES",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.5.1",
+      "descripcion": "CONCRETO EN ESTRUCTURAS DE SOSTENIMIENTO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.5.2",
+      "descripcion": "ENCOFRADO EN ESTRUCTURAS DE SOSTENIMIENTO",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.2.6",
+      "descripcion": "SOBRECIMIENTOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.6.1",
+      "descripcion": "CONCRETO 1:8 + 25% PM EN SOBRECIMIENTOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.6.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN SOBRECIMIENTOS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.2.7",
+      "descripcion": "GRADAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.7.1",
+      "descripcion": "CONCRETO f'c=140 kg/cm² EN GRADAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.2.7.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN GRADAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.2.8",
+      "descripcion": "RAMPAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.8.1",
+      "descripcion": "CONCRETO f'c=140 kg/cm² EN RAMPAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.2.8.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN RAMPAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.2.9",
+      "descripcion": "FALSOPISO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.2.9.1",
+      "descripcion": "FALSO PISO E=4', MEZCLA 1:8",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.2.9.2",
+      "descripcion": "FALSO PISO E=10cm, MEZCLA 1:10",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
     },
     {
       "codigo": "OE.2.3",
-      "nombre": "Obras de Concreto Armado",
-      "color": "#EEEDFE",
-      "color_texto": "#3C3489"
+      "descripcion": "OBRAS DE CONCRETO ARMADO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.1",
+      "descripcion": "CIMIENTOS REFORZADOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.1.1",
+      "descripcion": "CONCRETO f'c=175 kg/cm² EN CIMIENTOS REFORZADOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.1.2",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN CIMIENTOS REFORZADOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.1.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN CIMIENTOS REFORZADOS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.1.4",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN CIMIENTOS REFORZADOS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.2",
+      "descripcion": "ZAPATAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.2.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN ZAPATAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.2.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN ZAPATAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.2.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN ZAPATAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.2.4",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN ZAPATAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.3",
+      "descripcion": "VIGAS DE CIMENTACIÓN",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.3.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN VIGAS DE CIMENTACIÓN",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.3.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN VIGAS DE CIMENTACIÓN",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.3.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN VIGAS DE CIMENTACIÓN",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.3.4",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN VIGAS DE CIMENTACIÓN",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.4",
+      "descripcion": "LOSAS DE CIMENTACIÓN",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.4.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS DE CIMENTACIÓN",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.4.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN LOSAS DE CIMENTACIÓN",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.4.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS DE CIMENTACIÓN",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.4.4",
+      "descripcion": "WATER STOP EN LOSAS DE CIMENTACIÓN",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.3.5",
+      "descripcion": "SOBRECIMIENTOS ARMADOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.5.1",
+      "descripcion": "CONCRETO f'c=175 kg/cm² EN SOBRECIMIENTOS ARMADOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.5.2",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN SOBRECIMIENTOS ARMADOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.5.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN SOBRECIMIENTOS ARMADOS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.5.4",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN SOBRECIMIENTOS ARMADOS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.6",
+      "descripcion": "MUROS Y TABIQUES DE CONCRETO ARMADO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.6.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN MUROS / PLACAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.6.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN MUROS / PLACAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.6.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO NORMAL EN MUROS / PLACAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.6.4",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO CARAVISTA EN MUROS / PLACAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.6.5",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN MUROS / PLACAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.7",
+      "descripcion": "COLUMNAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.7.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN COLUMNAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.7.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN COLUMNAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.7.3",
+      "descripcion": "CONCRETO f'c=350 kg/cm² EN COLUMNAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.7.4",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO NORMAL EN COLUMNAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_lateral"
+    },
+    {
+      "codigo": "OE.2.3.7.5",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO CARAVISTA EN COLUMNAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_lateral"
+    },
+    {
+      "codigo": "OE.2.3.7.6",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO METÁLICO EN COLUMNAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_lateral"
+    },
+    {
+      "codigo": "OE.2.3.7.7",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN COLUMNAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.7.8",
+      "descripcion": "DOWELLS DE ACERO Ø1/2' EN COLUMNAS",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.3.7.9",
+      "descripcion": "ESTRIBOS DE ACERO Ø3/8' EN COLUMNAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.8",
+      "descripcion": "VIGAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.8.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN VIGAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.8.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN VIGAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.8.3",
+      "descripcion": "CONCRETO f'c=350 kg/cm² EN VIGAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.8.4",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO NORMAL EN VIGAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.8.5",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO CARAVISTA EN VIGAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.8.6",
+      "descripcion": "ENCOFRADO METÁLICO EN VIGAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.8.7",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN VIGAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.8.8",
+      "descripcion": "DOWELLS DE ACERO Ø1/2' EN VIGAS",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.3.8.9",
+      "descripcion": "ESTRIBOS DE ACERO Ø3/8' EN VIGAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.9",
+      "descripcion": "LOSAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.9.1",
+      "descripcion": "LOSAS MACIZAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.9.1.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS MACIZAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.1.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN LOSAS MACIZAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.1.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN LOSAS MACIZAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.9.1.4",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS MACIZAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.9.2",
+      "descripcion": "LOSAS ALIGERADAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.9.2.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS ALIGERADAS H=17cm",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.2.2",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS ALIGERADAS H=20cm",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.2.3",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS ALIGERADAS H=25cm",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.2.4",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN LOSAS ALIGERADAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.9.2.5",
+      "descripcion": "LADRILLO HUECO 15x30x30 PARA LOSA ALIGERADA H=20",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.3.9.2.6",
+      "descripcion": "LADRILLO HUECO 20x30x30 PARA LOSA ALIGERADA H=25",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.3.9.2.7",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS ALIGERADAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.9.2.8",
+      "descripcion": "FRISO DE LADRILLO PARA LOSA ALIGERADA",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.3.9.3",
+      "descripcion": "LOSAS NERVADAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.9.3.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS NERVADAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.3.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN LOSAS NERVADAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.9.3.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS NERVADAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.9.4",
+      "descripcion": "LOSAS PRE-FABRICADAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.9.4.1",
+      "descripcion": "VIGUETAS PRE-FABRICADAS PARA LOSA ALIGERADA",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.3.9.5",
+      "descripcion": "LOSAS COLABORANTES (DECK)",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.9.5.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN LOSAS COLABORANTES",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.9.5.2",
+      "descripcion": "PLACA COLABORANTE METÁLICA (STEEL DECK)",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.10",
+      "descripcion": "ESCALERAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.10.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN ESCALERAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.10.2",
+      "descripcion": "CONCRETO f'c=280 kg/cm² EN ESCALERAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.10.3",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN ESCALERAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.10.4",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN ESCALERAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.10.5",
+      "descripcion": "PASAMANOS METÁLICOS EN ESCALERAS",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.3.10.6",
+      "descripcion": "DESCANSOS DE ESCALERA EN CONCRETO",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.11",
+      "descripcion": "MUROS DE CONTENCIÓN",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.11.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN MUROS DE CONTENCIÓN",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.11.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN MUROS DE CONTENCIÓN",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.11.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN MUROS DE CONTENCIÓN",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.12",
+      "descripcion": "CISTERNAS Y TANQUES",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.12.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN CISTERNAS Y TANQUES",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.12.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN CISTERNAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.12.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN CISTERNAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.13",
+      "descripcion": "TANQUES ELEVADOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.13.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN TANQUES ELEVADOS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.13.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN TANQUES ELEVADOS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.3.13.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN TANQUES ELEVADOS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.14",
+      "descripcion": "PILOTES",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.14.1",
+      "descripcion": "PILOTES PRE-FABRICADOS HINCADOS",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.3.14.2",
+      "descripcion": "PILOTES VACIADOS IN SITU",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.3.14.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 EN PILOTES",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.15",
+      "descripcion": "CAISSONES",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.15.1",
+      "descripcion": "CONCRETO f'c=210 EN CAISSONES",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.15.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN CAISSONES",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.15.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 EN CAISSONES",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.16",
+      "descripcion": "ESTRUCTURAS DE CONCRETO PRETENSADO O POSTENSADO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.16.1",
+      "descripcion": "CONCRETO PRETENSADO EN VIGAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.16.2",
+      "descripcion": "CONCRETO PRETENSADO EN LOSAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_area_esp"
+    },
+    {
+      "codigo": "OE.2.3.16.3",
+      "descripcion": "CABLES DE ACERO PRETENSADO",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.3.17",
+      "descripcion": "CANALETAS Y CUNETAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.3.17.1",
+      "descripcion": "CONCRETO f'c=210 kg/cm² EN CANALETAS / CUNETAS",
+      "unidad": "m³",
+      "tipo_calculo": "m3_l_a_h"
+    },
+    {
+      "codigo": "OE.2.3.17.2",
+      "descripcion": "ENCOFRADO Y DESENCOFRADO EN CANALETAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_perimetro_alt"
+    },
+    {
+      "codigo": "OE.2.3.17.3",
+      "descripcion": "ACERO CORRUGADO fy=4200 kg/cm² EN CANALETAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
     },
     {
       "codigo": "OE.2.4",
-      "nombre": "Estructuras Metálicas",
-      "color": "#FAECE7",
-      "color_texto": "#993C1D"
+      "descripcion": "ESTRUCTURAS METÁLICAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.1",
+      "descripcion": "COLUMNAS O PILARES METÁLICAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.1.1",
+      "descripcion": "ARMADO DE COLUMNAS METÁLICAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.1.2",
+      "descripcion": "MONTAJE DE COLUMNAS METÁLICAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.1.3",
+      "descripcion": "PLACAS BASE PARA COLUMNAS METÁLICAS",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.4.2",
+      "descripcion": "VIGAS METÁLICAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.2.1",
+      "descripcion": "ARMADO DE VIGAS METÁLICAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.2.2",
+      "descripcion": "MONTAJE DE VIGAS METÁLICAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.2.3",
+      "descripcion": "VIGAS H DE ACERO ASTM A36",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.3",
+      "descripcion": "VIGUETAS METÁLICAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.3.1",
+      "descripcion": "ARMADO DE VIGUETAS METÁLICAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.3.2",
+      "descripcion": "MONTAJE DE VIGUETAS METÁLICAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.4",
+      "descripcion": "TIJERALES Y RETICULADOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.4.1",
+      "descripcion": "ARMADO DE TIJERALES METÁLICOS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.4.2",
+      "descripcion": "MONTAJE DE TIJERALES METÁLICOS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.5",
+      "descripcion": "CORREAS METÁLICAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.5.1",
+      "descripcion": "ARMADO DE CORREAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.5.2",
+      "descripcion": "MONTAJE DE CORREAS",
+      "unidad": "kg",
+      "tipo_calculo": "kg_acero"
+    },
+    {
+      "codigo": "OE.2.4.6",
+      "descripcion": "COBERTURAS METÁLICAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.6.1",
+      "descripcion": "COBERTURA CON PLANCHAS CORRUGADAS GALVANIZADAS",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.4.6.2",
+      "descripcion": "COBERTURA CON PLANCHAS CORRUGADAS DE FIBRO-CEMENTO",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.4.6.3",
+      "descripcion": "COBERTURA METÁLICA CON CALAMINA",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.4.7",
+      "descripcion": "ANCLAJES Y ACCESORIOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.4.7.1",
+      "descripcion": "PERNOS DE ANCLAJE EN ESTRUCTURA METÁLICA",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.4.7.2",
+      "descripcion": "PROTECCIÓN ANTI-CORROSIVA EN ESTRUCTURA METÁLICA",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
     },
     {
       "codigo": "OE.2.5",
-      "nombre": "Estructuras de Madera",
-      "color": "#FBEAF0",
-      "color_texto": "#993556"
+      "descripcion": "ESTRUCTURAS DE MADERA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.5.1",
+      "descripcion": "COLUMNAS DE MADERA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.5.1.1",
+      "descripcion": "COLUMNAS DE MADERA TORNILLO",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.5.1.2",
+      "descripcion": "COLUMNAS DE MADERA EUCALIPTO",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.5.2",
+      "descripcion": "VIGAS DE MADERA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.5.2.1",
+      "descripcion": "VIGAS DE MADERA TORNILLO",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.5.2.2",
+      "descripcion": "VIGAS DE MADERA EUCALIPTO",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.5.3",
+      "descripcion": "TIJERALES DE MADERA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.5.3.1",
+      "descripcion": "TIJERALES DE MADERA TORNILLO",
+      "unidad": "und",
+      "tipo_calculo": "und_cant"
+    },
+    {
+      "codigo": "OE.2.5.4",
+      "descripcion": "COBERTURA DE MADERA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.5.4.1",
+      "descripcion": "COBERTURA DE TEJA SOBRE ESTRUCTURA DE MADERA",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
+    },
+    {
+      "codigo": "OE.2.5.5",
+      "descripcion": "PRESERVACIÓN DE MADERA",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.5.5.1",
+      "descripcion": "PRESERVANTE PARA MADERA",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
     },
     {
       "codigo": "OE.2.6",
-      "nombre": "Varios",
-      "color": "#F1EFE8",
-      "color_texto": "#5F5E5A"
+      "descripcion": "VARIOS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.6.1",
+      "descripcion": "JUNTAS",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.6.1.1",
+      "descripcion": "JUNTAS DE DILATACIÓN",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.6.1.2",
+      "descripcion": "JUNTAS DE CONSTRUCCIÓN",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.6.2",
+      "descripcion": "WATER STOP",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.6.2.1",
+      "descripcion": "WATER STOP DE PVC EN JUNTAS",
+      "unidad": "m",
+      "tipo_calculo": "m_largo"
+    },
+    {
+      "codigo": "OE.2.6.3",
+      "descripcion": "CURADO",
+      "unidad": "",
+      "tipo_calculo": ""
+    },
+    {
+      "codigo": "OE.2.6.3.1",
+      "descripcion": "CURADO DE CONCRETO",
+      "unidad": "m²",
+      "tipo_calculo": "m2_largo_ancho"
     }
   ],
-  "partidas": [
-
-    {"codigo":"OE.2.1.1.1","descripcion":"NIVELACIÓN: NIVELADO APISONADO","unidad":"m²","categoria":"OE.2.1","subcategoria":"Nivelación de Terreno","tipo_calculo":"m2_largo_ancho","palabras_clave":"nivelacion apisonado terreno"},
-    {"codigo":"OE.2.1.2.1","descripcion":"EXCAVACIÓN MASIVA EN TERRENO NORMAL","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion masiva terreno normal"},
-    {"codigo":"OE.2.1.2.2","descripcion":"EXCAVACIÓN MASIVA EN TERRENO ROCOSO","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion masiva rocoso"},
-    {"codigo":"OE.2.1.2.3","descripcion":"EXCAVACIÓN PARA ZAPATAS EN TERRENO NORMAL","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion zapatas terreno normal"},
-    {"codigo":"OE.2.1.2.4","descripcion":"EXCAVACIÓN DE ZANJAS PARA CIMIENTOS","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion zanjas cimientos"},
-    {"codigo":"OE.2.1.2.5","descripcion":"EXCAVACIÓN DE ZANJAS PARA TUBERÍAS","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion zanjas tuberias"},
-    {"codigo":"OE.2.1.3.1","descripcion":"CORTE EN TERRENO NORMAL","unidad":"m³","categoria":"OE.2.1","subcategoria":"Cortes","tipo_calculo":"m3_l_a_h","palabras_clave":"corte terreno normal"},
-    {"codigo":"OE.2.1.4.1","descripcion":"REFINE Y NIVELACIÓN DE FONDO DE ZANJAS","unidad":"m²","categoria":"OE.2.1","subcategoria":"Refine","tipo_calculo":"m2_largo_ancho","palabras_clave":"refine nivelacion fondo zanjas"},
-    {"codigo":"OE.2.1.5.1","descripcion":"RELLENO COMPACTADO CON MATERIAL PROPIO","unidad":"m³","categoria":"OE.2.1","subcategoria":"Rellenos","tipo_calculo":"m3_l_a_h","palabras_clave":"relleno compactado material propio"},
-    {"codigo":"OE.2.1.5.2","descripcion":"RELLENO COMPACTADO CON MATERIAL DE PRÉSTAMO","unidad":"m³","categoria":"OE.2.1","subcategoria":"Rellenos","tipo_calculo":"m3_l_a_h","palabras_clave":"relleno compactado material prestamo"},
-    {"codigo":"OE.2.1.5.3","descripcion":"RELLENO COMPACTADO CON HORMIGÓN","unidad":"m³","categoria":"OE.2.1","subcategoria":"Rellenos","tipo_calculo":"m3_l_a_h","palabras_clave":"relleno compactado hormigon"},
-    {"codigo":"OE.2.1.5.4","descripcion":"RELLENO COMPACTADO CON AFIRMADO E=0.10m","unidad":"m³","categoria":"OE.2.1","subcategoria":"Rellenos","tipo_calculo":"m3_area_esp","palabras_clave":"relleno afirmado e=0.10"},
-    {"codigo":"OE.2.1.6.1","descripcion":"ELIMINACIÓN DE MATERIAL EXCEDENTE D<5km","unidad":"m³","categoria":"OE.2.1","subcategoria":"Eliminación","tipo_calculo":"m3_l_a_h","palabras_clave":"eliminacion material excedente"},
-    {"codigo":"OE.2.1.6.2","descripcion":"ELIMINACIÓN DE MATERIAL EXCEDENTE C/EQUIPO","unidad":"m³","categoria":"OE.2.1","subcategoria":"Eliminación","tipo_calculo":"m3_l_a_h","palabras_clave":"eliminacion material excedente equipo"},
-    {"codigo":"OE.2.1.7.1","descripcion":"TABLAESTACADO PARA EXCAVACIONES","unidad":"m²","categoria":"OE.2.1","subcategoria":"Sostenimiento","tipo_calculo":"m2_largo_ancho","palabras_clave":"tablaestacado excavaciones"},
-
-    {"codigo":"OE.2.2.1.1","descripcion":"CONCRETO 1:10 + 30% PG EN CIMIENTOS CORRIDOS","unidad":"m³","categoria":"OE.2.2","subcategoria":"Cimientos Corridos","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto cimientos corridos"},
-    {"codigo":"OE.2.2.1.2","descripcion":"CONCRETO f'c=100 kg/cm² + 30% PG EN CIMIENTOS","unidad":"m³","categoria":"OE.2.2","subcategoria":"Cimientos Corridos","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto fc=100 cimientos"},
-    {"codigo":"OE.2.2.2.1","descripcion":"CONCRETO 1:12 EN SUB ZAPATAS / FALSA ZAPATA","unidad":"m³","categoria":"OE.2.2","subcategoria":"Sub Zapatas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto sub zapatas falsa zapata"},
-    {"codigo":"OE.2.2.2.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN SUB ZAPATAS","unidad":"m²","categoria":"OE.2.2","subcategoria":"Sub Zapatas","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado sub zapatas"},
-    {"codigo":"OE.2.2.3.1","descripcion":"SOLADO PARA ZAPATAS E=2', MEZCLA 1:12","unidad":"m²","categoria":"OE.2.2","subcategoria":"Solados","tipo_calculo":"m2_largo_ancho","palabras_clave":"solado zapatas mezcla 1:12"},
-    {"codigo":"OE.2.2.4.1","descripcion":"BASE DE CONCRETO f'c=140 kg/cm²","unidad":"m³","categoria":"OE.2.2","subcategoria":"Bases","tipo_calculo":"m3_area_esp","palabras_clave":"base concreto fc=140"},
-    {"codigo":"OE.2.2.4.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN BASES","unidad":"m²","categoria":"OE.2.2","subcategoria":"Bases","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado bases concreto"},
-    {"codigo":"OE.2.2.6.1","descripcion":"CONCRETO 1:8 + 25% PM EN SOBRECIMIENTOS","unidad":"m³","categoria":"OE.2.2","subcategoria":"Sobrecimientos","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto sobrecimientos pm"},
-    {"codigo":"OE.2.2.6.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN SOBRECIMIENTOS","unidad":"m²","categoria":"OE.2.2","subcategoria":"Sobrecimientos","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado sobrecimientos"},
-    {"codigo":"OE.2.2.7.1","descripcion":"CONCRETO f'c=140 kg/cm² EN GRADAS","unidad":"m³","categoria":"OE.2.2","subcategoria":"Gradas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto gradas fc=140"},
-    {"codigo":"OE.2.2.7.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN GRADAS","unidad":"m²","categoria":"OE.2.2","subcategoria":"Gradas","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado gradas"},
-    {"codigo":"OE.2.2.8.1","descripcion":"CONCRETO f'c=140 kg/cm² EN RAMPAS","unidad":"m³","categoria":"OE.2.2","subcategoria":"Rampas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto rampas fc=140"},
-    {"codigo":"OE.2.2.8.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN RAMPAS","unidad":"m²","categoria":"OE.2.2","subcategoria":"Rampas","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado rampas"},
-    {"codigo":"OE.2.2.9.1","descripcion":"FALSO PISO E=4', MEZCLA 1:8","unidad":"m²","categoria":"OE.2.2","subcategoria":"Falsopiso","tipo_calculo":"m2_largo_ancho","palabras_clave":"falso piso mezcla 1:8"},
-    {"codigo":"OE.2.2.9.2","descripcion":"FALSO PISO E=10cm, MEZCLA 1:10","unidad":"m²","categoria":"OE.2.2","subcategoria":"Falsopiso","tipo_calculo":"m2_largo_ancho","palabras_clave":"falso piso e=10 mezcla 1:10"},
-
-    {"codigo":"OE.2.3.1.1","descripcion":"CONCRETO f'c=175 kg/cm² EN CIMIENTOS REFORZADOS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Cimientos Reforzados","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto cimientos reforzados fc=175"},
-    {"codigo":"OE.2.3.1.2","descripcion":"CONCRETO f'c=210 kg/cm² EN CIMIENTOS REFORZADOS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Cimientos Reforzados","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto cimientos reforzados fc=210"},
-    {"codigo":"OE.2.3.1.3","descripcion":"ENCOFRADO Y DESENCOFRADO EN CIMIENTOS REFORZADOS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Cimientos Reforzados","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado cimientos reforzados"},
-    {"codigo":"OE.2.3.1.4","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN CIMIENTOS REFORZADOS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Cimientos Reforzados","tipo_calculo":"kg_acero","palabras_clave":"acero cimientos reforzados fy=4200"},
-
-    {"codigo":"OE.2.3.2.1","descripcion":"CONCRETO f'c=210 kg/cm² EN ZAPATAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto zapatas fc=210"},
-    {"codigo":"OE.2.3.2.2","descripcion":"CONCRETO f'c=280 kg/cm² EN ZAPATAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto zapatas fc=280"},
-    {"codigo":"OE.2.3.2.3","descripcion":"ENCOFRADO Y DESENCOFRADO EN ZAPATAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado zapatas"},
-    {"codigo":"OE.2.3.2.4","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN ZAPATAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"kg_acero","palabras_clave":"acero zapatas fy=4200"},
-
-    {"codigo":"OE.2.3.3.1","descripcion":"CONCRETO f'c=210 kg/cm² EN VIGAS DE CIMENTACIÓN","unidad":"m³","categoria":"OE.2.3","subcategoria":"Vigas de Cimentación","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto vigas cimentacion fc=210"},
-    {"codigo":"OE.2.3.3.2","descripcion":"CONCRETO f'c=280 kg/cm² EN VIGAS DE CIMENTACIÓN","unidad":"m³","categoria":"OE.2.3","subcategoria":"Vigas de Cimentación","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto vigas cimentacion fc=280"},
-    {"codigo":"OE.2.3.3.3","descripcion":"ENCOFRADO Y DESENCOFRADO EN VIGAS DE CIMENTACIÓN","unidad":"m²","categoria":"OE.2.3","subcategoria":"Vigas de Cimentación","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado vigas cimentacion"},
-    {"codigo":"OE.2.3.3.4","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN VIGAS DE CIMENTACIÓN","unidad":"kg","categoria":"OE.2.3","subcategoria":"Vigas de Cimentación","tipo_calculo":"kg_acero","palabras_clave":"acero vigas cimentacion fy=4200"},
-
-    {"codigo":"OE.2.3.4.1","descripcion":"CONCRETO f'c=210 kg/cm² EN LOSAS DE CIMENTACIÓN","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas de Cimentación","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas cimentacion fc=210"},
-    {"codigo":"OE.2.3.4.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN LOSAS DE CIMENTACIÓN","unidad":"m²","categoria":"OE.2.3","subcategoria":"Losas de Cimentación","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado losas cimentacion"},
-    {"codigo":"OE.2.3.4.3","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS DE CIMENTACIÓN","unidad":"kg","categoria":"OE.2.3","subcategoria":"Losas de Cimentación","tipo_calculo":"kg_acero","palabras_clave":"acero losas cimentacion fy=4200"},
-
-    {"codigo":"OE.2.3.5.1","descripcion":"CONCRETO f'c=175 kg/cm² EN SOBRECIMIENTOS ARMADOS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Sobrecimientos Armados","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto sobrecimientos armados fc=175"},
-    {"codigo":"OE.2.3.5.2","descripcion":"CONCRETO f'c=210 kg/cm² EN SOBRECIMIENTOS ARMADOS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Sobrecimientos Armados","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto sobrecimientos armados fc=210"},
-    {"codigo":"OE.2.3.5.3","descripcion":"ENCOFRADO Y DESENCOFRADO EN SOBRECIMIENTOS ARMADOS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Sobrecimientos Armados","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado sobrecimientos armados"},
-    {"codigo":"OE.2.3.5.4","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN SOBRECIMIENTOS ARMADOS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Sobrecimientos Armados","tipo_calculo":"kg_acero","palabras_clave":"acero sobrecimientos armados fy=4200"},
-
-    {"codigo":"OE.2.3.6.1","descripcion":"CONCRETO f'c=210 kg/cm² EN COLUMNAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto columnas fc=210"},
-    {"codigo":"OE.2.3.6.2","descripcion":"CONCRETO f'c=280 kg/cm² EN COLUMNAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto columnas fc=280"},
-    {"codigo":"OE.2.3.6.3","descripcion":"CONCRETO f'c=350 kg/cm² EN COLUMNAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto columnas fc=350"},
-    {"codigo":"OE.2.3.6.4","descripcion":"ENCOFRADO Y DESENCOFRADO NORMAL EN COLUMNAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"m2_lateral","palabras_clave":"encofrado columnas normal"},
-    {"codigo":"OE.2.3.6.5","descripcion":"ENCOFRADO Y DESENCOFRADO CARAVISTA EN COLUMNAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"m2_lateral","palabras_clave":"encofrado columnas caravista"},
-    {"codigo":"OE.2.3.6.6","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN COLUMNAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"kg_acero","palabras_clave":"acero columnas fy=4200"},
-
-    {"codigo":"OE.2.3.7.1","descripcion":"CONCRETO f'c=210 kg/cm² EN PLACAS / MUROS DE CORTE","unidad":"m³","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"m3_area_esp","palabras_clave":"concreto placas muros corte fc=210"},
-    {"codigo":"OE.2.3.7.2","descripcion":"CONCRETO f'c=280 kg/cm² EN PLACAS / MUROS DE CORTE","unidad":"m³","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"m3_area_esp","palabras_clave":"concreto placas muros corte fc=280"},
-    {"codigo":"OE.2.3.7.3","descripcion":"ENCOFRADO Y DESENCOFRADO NORMAL EN PLACAS / MUROS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado placas muros normal"},
-    {"codigo":"OE.2.3.7.4","descripcion":"ENCOFRADO Y DESENCOFRADO CARAVISTA EN PLACAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado placas muros caravista"},
-    {"codigo":"OE.2.3.7.5","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN PLACAS / MUROS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"kg_acero","palabras_clave":"acero placas muros fy=4200"},
-
-    {"codigo":"OE.2.3.8.1","descripcion":"CONCRETO f'c=210 kg/cm² EN VIGAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto vigas fc=210"},
-    {"codigo":"OE.2.3.8.2","descripcion":"CONCRETO f'c=280 kg/cm² EN VIGAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto vigas fc=280"},
-    {"codigo":"OE.2.3.8.3","descripcion":"CONCRETO f'c=350 kg/cm² EN VIGAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto vigas fc=350"},
-    {"codigo":"OE.2.3.8.4","descripcion":"ENCOFRADO Y DESENCOFRADO NORMAL EN VIGAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado vigas normal"},
-    {"codigo":"OE.2.3.8.5","descripcion":"ENCOFRADO Y DESENCOFRADO CARAVISTA EN VIGAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado vigas caravista"},
-    {"codigo":"OE.2.3.8.6","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN VIGAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"kg_acero","palabras_clave":"acero vigas fy=4200"},
-
-    {"codigo":"OE.2.3.9.1.1","descripcion":"CONCRETO f'c=210 kg/cm² EN LOSAS MACIZAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Macizas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas macizas fc=210"},
-    {"codigo":"OE.2.3.9.1.2","descripcion":"CONCRETO f'c=280 kg/cm² EN LOSAS MACIZAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Macizas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas macizas fc=280"},
-    {"codigo":"OE.2.3.9.1.3","descripcion":"ENCOFRADO Y DESENCOFRADO EN LOSAS MACIZAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Losas Macizas","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado losas macizas"},
-    {"codigo":"OE.2.3.9.1.4","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS MACIZAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Losas Macizas","tipo_calculo":"kg_acero","palabras_clave":"acero losas macizas fy=4200"},
-
-    {"codigo":"OE.2.3.9.2.1","descripcion":"CONCRETO f'c=210 kg/cm² EN LOSAS ALIGERADAS H=17cm","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas aligeradas h=17"},
-    {"codigo":"OE.2.3.9.2.2","descripcion":"CONCRETO f'c=210 kg/cm² EN LOSAS ALIGERADAS H=20cm","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas aligeradas h=20"},
-    {"codigo":"OE.2.3.9.2.3","descripcion":"CONCRETO f'c=210 kg/cm² EN LOSAS ALIGERADAS H=25cm","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas aligeradas h=25"},
-    {"codigo":"OE.2.3.9.2.4","descripcion":"ENCOFRADO Y DESENCOFRADO EN LOSAS ALIGERADAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado losas aligeradas"},
-    {"codigo":"OE.2.3.9.2.5","descripcion":"LADRILLO HUECO 15x30x30 PARA LOSA ALIGERADA H=20","unidad":"und","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"und_cant","palabras_clave":"ladrillo hueco losa aligerada"},
-    {"codigo":"OE.2.3.9.2.6","descripcion":"LADRILLO HUECO 20x30x30 PARA LOSA ALIGERADA H=25","unidad":"und","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"und_cant","palabras_clave":"ladrillo hueco losa aligerada h=25"},
-    {"codigo":"OE.2.3.9.2.7","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS ALIGERADAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"kg_acero","palabras_clave":"acero losas aligeradas fy=4200"},
-
-    {"codigo":"OE.2.3.9.3.1","descripcion":"CONCRETO f'c=210 kg/cm² EN LOSAS NERVADAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Nervadas","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas nervadas fc=210"},
-    {"codigo":"OE.2.3.9.3.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN LOSAS NERVADAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Losas Nervadas","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado losas nervadas"},
-    {"codigo":"OE.2.3.9.3.3","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN LOSAS NERVADAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Losas Nervadas","tipo_calculo":"kg_acero","palabras_clave":"acero losas nervadas fy=4200"},
-
-    {"codigo":"OE.2.3.10.1","descripcion":"CONCRETO f'c=210 kg/cm² EN ESCALERAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Escaleras","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto escaleras fc=210"},
-    {"codigo":"OE.2.3.10.2","descripcion":"CONCRETO f'c=280 kg/cm² EN ESCALERAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Escaleras","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto escaleras fc=280"},
-    {"codigo":"OE.2.3.10.3","descripcion":"ENCOFRADO Y DESENCOFRADO EN ESCALERAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Escaleras","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado escaleras"},
-    {"codigo":"OE.2.3.10.4","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN ESCALERAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Escaleras","tipo_calculo":"kg_acero","palabras_clave":"acero escaleras fy=4200"},
-
-    {"codigo":"OE.2.3.11.1","descripcion":"CONCRETO f'c=210 kg/cm² EN MUROS DE CONTENCIÓN","unidad":"m³","categoria":"OE.2.3","subcategoria":"Muros de Contención","tipo_calculo":"m3_area_esp","palabras_clave":"concreto muros contencion fc=210"},
-    {"codigo":"OE.2.3.11.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN MUROS DE CONTENCIÓN","unidad":"m²","categoria":"OE.2.3","subcategoria":"Muros de Contención","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado muros contencion"},
-    {"codigo":"OE.2.3.11.3","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN MUROS DE CONTENCIÓN","unidad":"kg","categoria":"OE.2.3","subcategoria":"Muros de Contención","tipo_calculo":"kg_acero","palabras_clave":"acero muros contencion fy=4200"},
-
-    {"codigo":"OE.2.3.12.1","descripcion":"CONCRETO f'c=210 kg/cm² EN CISTERNAS Y TANQUES","unidad":"m³","categoria":"OE.2.3","subcategoria":"Cisternas / Tanques","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto cisternas tanques fc=210"},
-    {"codigo":"OE.2.3.12.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN CISTERNAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Cisternas / Tanques","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado cisternas tanques"},
-    {"codigo":"OE.2.3.12.3","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN CISTERNAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Cisternas / Tanques","tipo_calculo":"kg_acero","palabras_clave":"acero cisternas tanques fy=4200"},
-
-    {"codigo":"OE.2.3.13.1","descripcion":"CONCRETO f'c=210 kg/cm² EN CANALETAS / CUNETAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Canaletas","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto canaletas cunetas"},
-    {"codigo":"OE.2.3.13.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN CANALETAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Canaletas","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado canaletas"},
-    {"codigo":"OE.2.3.13.3","descripcion":"ACERO CORRUGADO fy=4200 kg/cm² EN CANALETAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Canaletas","tipo_calculo":"kg_acero","palabras_clave":"acero canaletas fy=4200"},
-
-    {"codigo":"OE.2.3.14.1","descripcion":"PILOTES PRE-FABRICADOS HINCADOS","unidad":"m","categoria":"OE.2.3","subcategoria":"Pilotes","tipo_calculo":"m_largo","palabras_clave":"pilotes prefabricados hincados"},
-    {"codigo":"OE.2.3.14.2","descripcion":"PILOTES VACIADOS IN SITU","unidad":"m","categoria":"OE.2.3","subcategoria":"Pilotes","tipo_calculo":"m_largo","palabras_clave":"pilotes vaciados in situ"},
-    {"codigo":"OE.2.3.14.3","descripcion":"ACERO CORRUGADO fy=4200 EN PILOTES","unidad":"kg","categoria":"OE.2.3","subcategoria":"Pilotes","tipo_calculo":"kg_acero","palabras_clave":"acero pilotes"},
-
-    {"codigo":"OE.2.3.15.1","descripcion":"CONCRETO f'c=210 EN CAISSONES","unidad":"m³","categoria":"OE.2.3","subcategoria":"Caissones","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto caissones"},
-    {"codigo":"OE.2.3.15.2","descripcion":"ENCOFRADO Y DESENCOFRADO EN CAISSONES","unidad":"m²","categoria":"OE.2.3","subcategoria":"Caissones","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado caissones"},
-    {"codigo":"OE.2.3.15.3","descripcion":"ACERO CORRUGADO fy=4200 EN CAISSONES","unidad":"kg","categoria":"OE.2.3","subcategoria":"Caissones","tipo_calculo":"kg_acero","palabras_clave":"acero caissones"},
-
-    {"codigo":"OE.2.3.16.1","descripcion":"CONCRETO PRETENSADO O POSTENSADO","unidad":"m³","categoria":"OE.2.3","subcategoria":"Concreto Pretensado","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto pretensado postensado"},
-    {"codigo":"OE.2.3.16.2","descripcion":"ENCOFRADO EN CONCRETO PRETENSADO","unidad":"m²","categoria":"OE.2.3","subcategoria":"Concreto Pretensado","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado concreto pretensado"},
-    {"codigo":"OE.2.3.16.3","descripcion":"CABLES DE ACERO PRETENSADO","unidad":"kg","categoria":"OE.2.3","subcategoria":"Concreto Pretensado","tipo_calculo":"kg_acero","palabras_clave":"cables acero pretensado"},
-
-    {"codigo":"OE.2.4.1.1","descripcion":"COLUMNAS METÁLICAS","unidad":"kg","categoria":"OE.2.4","subcategoria":"Columnas Metálicas","tipo_calculo":"kg_acero","palabras_clave":"columnas metalicas"},
-    {"codigo":"OE.2.4.2.1","descripcion":"VIGAS METÁLICAS","unidad":"kg","categoria":"OE.2.4","subcategoria":"Vigas Metálicas","tipo_calculo":"kg_acero","palabras_clave":"vigas metalicas"},
-    {"codigo":"OE.2.4.3.1","descripcion":"TIJERALES METÁLICOS","unidad":"kg","categoria":"OE.2.4","subcategoria":"Tijerales","tipo_calculo":"kg_acero","palabras_clave":"tijerales metalicos"},
-    {"codigo":"OE.2.4.4.1","descripcion":"COBERTURA METÁLICA CON CALAMINA","unidad":"m²","categoria":"OE.2.4","subcategoria":"Cobertura Metálica","tipo_calculo":"m2_largo_ancho","palabras_clave":"cobertura metalica calamina"},
-    {"codigo":"OE.2.4.5.1","descripcion":"PROTECCIÓN ANTI-CORROSIVA EN ESTRUCTURA METÁLICA","unidad":"m²","categoria":"OE.2.4","subcategoria":"Protección","tipo_calculo":"m2_largo_ancho","palabras_clave":"proteccion anti corrosiva"},
-
-    {"codigo":"OE.2.5.1.1","descripcion":"COLUMNAS DE MADERA","unidad":"m","categoria":"OE.2.5","subcategoria":"Columnas Madera","tipo_calculo":"m_largo","palabras_clave":"columnas madera"},
-    {"codigo":"OE.2.5.2.1","descripcion":"VIGAS DE MADERA","unidad":"m","categoria":"OE.2.5","subcategoria":"Vigas Madera","tipo_calculo":"m_largo","palabras_clave":"vigas madera"},
-    {"codigo":"OE.2.5.3.1","descripcion":"TIJERALES DE MADERA","unidad":"und","categoria":"OE.2.5","subcategoria":"Tijerales Madera","tipo_calculo":"und_cant","palabras_clave":"tijerales madera"},
-
-    {"codigo":"OE.2.6.1.1","descripcion":"JUNTAS DE DILATACIÓN","unidad":"m","categoria":"OE.2.6","subcategoria":"Juntas","tipo_calculo":"m_largo","palabras_clave":"juntas dilatacion"},
-    {"codigo":"OE.2.6.2.1","descripcion":"WATER STOP DE PVC EN JUNTAS","unidad":"m","categoria":"OE.2.6","subcategoria":"Water Stop","tipo_calculo":"m_largo","palabras_clave":"water stop pvc juntas"},
-
-    {"codigo":"OE.2.3.6.7","descripcion":"ENCOFRADO Y DESENCOFRADO METÁLICO EN COLUMNAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"m2_lateral","palabras_clave":"encofrado metalico columnas"},
-    {"codigo":"OE.2.3.8.7","descripcion":"ENCOFRADO METÁLICO EN VIGAS","unidad":"m²","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"m2_perimetro_alt","palabras_clave":"encofrado metalico vigas"},
-    {"codigo":"OE.2.3.9.4.1","descripcion":"VIGUETAS PRE-FABRICADAS PARA LOSA ALIGERADA","unidad":"m","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"m_largo","palabras_clave":"viguetas prefabricadas losa aligerada"},
-    {"codigo":"OE.2.3.9.5.1","descripcion":"CONCRETO EN LOSAS COLABORANTES (DECK)","unidad":"m³","categoria":"OE.2.3","subcategoria":"Losas Colaborantes","tipo_calculo":"m3_area_esp","palabras_clave":"concreto losas colaborantes deck"},
-    {"codigo":"OE.2.3.9.5.2","descripcion":"PLACA COLABORANTE METÁLICA (STEEL DECK)","unidad":"m²","categoria":"OE.2.3","subcategoria":"Losas Colaborantes","tipo_calculo":"m2_largo_ancho","palabras_clave":"placa colaborante steel deck"},
-
-    {"codigo":"OE.2.3.2.5","descripcion":"ACERO LISO Ø1/4' EN ZAPATAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"kg_acero","palabras_clave":"acero liso 1/4 zapatas"},
-    {"codigo":"OE.2.3.2.6","descripcion":"DOWELLS Ø1/2' EN ZAPATAS","unidad":"und","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"und_cant","palabras_clave":"dowells zapatas"},
-
-    {"codigo":"OE.2.1.1.2","descripcion":"NIVELACIÓN INTERIOR APISONADO MANUAL","unidad":"m²","categoria":"OE.2.1","subcategoria":"Nivelación de Terreno","tipo_calculo":"m2_largo_ancho","palabras_clave":"nivelacion interior apisonado manual"},
-    {"codigo":"OE.2.1.2.6","descripcion":"EXCAVACIÓN DE ZANJAS PARA INST. SANITARIAS","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion zanjas sanitarias"},
-    {"codigo":"OE.2.1.2.7","descripcion":"EXCAVACIÓN MANUAL EN TERRENO NORMAL","unidad":"m³","categoria":"OE.2.1","subcategoria":"Excavaciones","tipo_calculo":"m3_l_a_h","palabras_clave":"excavacion manual terreno normal"},
-    {"codigo":"OE.2.1.5.5","descripcion":"RELLENO COMPACTADO CON ARENA FINA E=10cm","unidad":"m²","categoria":"OE.2.1","subcategoria":"Rellenos","tipo_calculo":"m2_largo_ancho","palabras_clave":"relleno compactado arena fina"},
-
-    {"codigo":"OE.2.2.1.3","descripcion":"CONCRETO 1:8 + 30% PG EN CIMIENTOS CORRIDOS","unidad":"m³","categoria":"OE.2.2","subcategoria":"Cimientos Corridos","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto cimientos corridos 1:8"},
-    {"codigo":"OE.2.2.5.1","descripcion":"CONCRETO EN ESTRUCTURAS DE SOSTENIMIENTO","unidad":"m³","categoria":"OE.2.2","subcategoria":"Sostenimiento","tipo_calculo":"m3_l_a_h","palabras_clave":"concreto estructuras sostenimiento"},
-    {"codigo":"OE.2.2.5.2","descripcion":"ENCOFRADO EN ESTRUCTURAS DE SOSTENIMIENTO","unidad":"m²","categoria":"OE.2.2","subcategoria":"Sostenimiento","tipo_calculo":"m2_largo_ancho","palabras_clave":"encofrado estructuras sostenimiento"},
-
-    {"codigo":"OE.2.3.6.8","descripcion":"DOWELLS DE ACERO Ø1/2' EN COLUMNAS","unidad":"und","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"und_cant","palabras_clave":"dowells columnas 1/2"},
-    {"codigo":"OE.2.3.7.6","descripcion":"DOWELLS DE ACERO EN PLACAS / MUROS","unidad":"und","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"und_cant","palabras_clave":"dowells placas muros"},
-    {"codigo":"OE.2.3.8.8","descripcion":"DOWELLS DE ACERO Ø1/2' EN VIGAS","unidad":"und","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"und_cant","palabras_clave":"dowells vigas 1/2"},
-
-    {"codigo":"OE.2.3.5.5","descripcion":"ACERO LISO Ø1/4' EN SOBRECIMIENTOS ARMADOS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Sobrecimientos Armados","tipo_calculo":"kg_acero","palabras_clave":"acero liso sobrecimientos armados"},
-    {"codigo":"OE.2.3.10.5","descripcion":"PASAMANOS METÁLICOS EN ESCALERAS","unidad":"m","categoria":"OE.2.3","subcategoria":"Escaleras","tipo_calculo":"m_largo","palabras_clave":"pasamanos metalicos escaleras"},
-    {"codigo":"OE.2.3.10.6","descripcion":"DESCANSOS DE ESCALERA EN CONCRETO","unidad":"m³","categoria":"OE.2.3","subcategoria":"Escaleras","tipo_calculo":"m3_l_a_h","palabras_clave":"descansos escalera concreto"},
-
-    {"codigo":"OE.2.4.1.2","descripcion":"PLACAS BASE PARA COLUMNAS METÁLICAS","unidad":"und","categoria":"OE.2.4","subcategoria":"Columnas Metálicas","tipo_calculo":"und_cant","palabras_clave":"placas base columnas metalicas"},
-    {"codigo":"OE.2.4.2.2","descripcion":"VIGAS H DE ACERO ASTM A36","unidad":"kg","categoria":"OE.2.4","subcategoria":"Vigas Metálicas","tipo_calculo":"kg_acero","palabras_clave":"vigas h acero astm a36"},
-    {"codigo":"OE.2.4.3.2","descripcion":"CORREAS METÁLICAS EN COBERTURA","unidad":"kg","categoria":"OE.2.4","subcategoria":"Tijerales","tipo_calculo":"kg_acero","palabras_clave":"correas metalicas cobertura"},
-    {"codigo":"OE.2.4.4.2","descripcion":"COBERTURA METÁLICA CON FIBROCEMENTO","unidad":"m²","categoria":"OE.2.4","subcategoria":"Cobertura Metálica","tipo_calculo":"m2_largo_ancho","palabras_clave":"cobertura metalica fibrocemento"},
-    {"codigo":"OE.2.4.6.1","descripcion":"PERNOS DE ANCLAJE EN ESTRUCTURA METÁLICA","unidad":"und","categoria":"OE.2.4","subcategoria":"Anclajes","tipo_calculo":"und_cant","palabras_clave":"pernos anclaje estructura metalica"},
-
-    {"codigo":"OE.2.5.4.1","descripcion":"COBERTURA DE TEJA SOBRE ESTRUCTURA DE MADERA","unidad":"m²","categoria":"OE.2.5","subcategoria":"Cobertura Madera","tipo_calculo":"m2_largo_ancho","palabras_clave":"cobertura teja madera"},
-    {"codigo":"OE.2.5.5.1","descripcion":"PRESERVANTE PARA MADERA","unidad":"m²","categoria":"OE.2.5","subcategoria":"Preservación","tipo_calculo":"m2_largo_ancho","palabras_clave":"preservante madera"},
-    {"codigo":"OE.2.6.3.1","descripcion":"CURADO DE CONCRETO","unidad":"m²","categoria":"OE.2.6","subcategoria":"Curado","tipo_calculo":"m2_largo_ancho","palabras_clave":"curado concreto"},
-
-    {"codigo":"OE.2.3.2.7","descripcion":"GROUTING / NIVELACIÓN BASE DE COLUMNAS","unidad":"m³","categoria":"OE.2.3","subcategoria":"Zapatas","tipo_calculo":"m3_l_a_h","palabras_clave":"grouting nivelacion base columnas"},
-    {"codigo":"OE.2.3.6.9","descripcion":"ESTRIBOS DE ACERO Ø3/8' EN COLUMNAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Columnas","tipo_calculo":"kg_acero","palabras_clave":"estribos acero 3/8 columnas"},
-    {"codigo":"OE.2.3.8.9","descripcion":"ESTRIBOS DE ACERO Ø3/8' EN VIGAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Vigas","tipo_calculo":"kg_acero","palabras_clave":"estribos acero 3/8 vigas"},
-    {"codigo":"OE.2.3.7.7","descripcion":"ESTRIBOS / GRAPAS EN PLACAS","unidad":"kg","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"kg_acero","palabras_clave":"estribos grapas placas"},
-
-    {"codigo":"OE.2.1.6.3","descripcion":"ACARREO DE MATERIAL PROPIO HASTA 20m","unidad":"m³","categoria":"OE.2.1","subcategoria":"Eliminación","tipo_calculo":"m3_l_a_h","palabras_clave":"acarreo material propio"},
-    {"codigo":"OE.2.1.6.4","descripcion":"BAJADA DE MATERIAL POR DUCTOS","unidad":"m³","categoria":"OE.2.1","subcategoria":"Eliminación","tipo_calculo":"m3_l_a_h","palabras_clave":"bajada material ductos"},
-
-    {"codigo":"OE.2.3.1.5","descripcion":"DESQUINCHE EN CIMIENTOS","unidad":"m","categoria":"OE.2.3","subcategoria":"Cimientos Reforzados","tipo_calculo":"m_largo","palabras_clave":"desquinche cimientos"},
-    {"codigo":"OE.2.3.4.4","descripcion":"WATER STOP EN LOSAS DE CIMENTACIÓN","unidad":"m","categoria":"OE.2.3","subcategoria":"Losas de Cimentación","tipo_calculo":"m_largo","palabras_clave":"water stop losas cimentacion"},
-
-    {"codigo":"OE.2.3.7.8","descripcion":"PUNTALES METÁLICOS EN PLACAS / MUROS","unidad":"und","categoria":"OE.2.3","subcategoria":"Placas / Muros","tipo_calculo":"und_cant","palabras_clave":"puntales metalicos placas muros"},
-    {"codigo":"OE.2.3.9.2.8","descripcion":"FRISO DE LADRILLO PARA LOSA ALIGERADA","unidad":"m","categoria":"OE.2.3","subcategoria":"Losas Aligeradas","tipo_calculo":"m_largo","palabras_clave":"friso ladrillo losa aligerada"}
-
-  ],
   "tabla_aceros": {
-    "1/4\"":  {"diametro_mm": 6.35, "peso_kg_m": 0.250},
-    "3/8\"":  {"diametro_mm": 9.53, "peso_kg_m": 0.560},
-    "1/2\"":  {"diametro_mm": 12.7, "peso_kg_m": 0.994},
-    "5/8\"":  {"diametro_mm": 15.88, "peso_kg_m": 1.552},
-    "3/4\"":  {"diametro_mm": 19.05, "peso_kg_m": 2.235},
-    "7/8\"":  {"diametro_mm": 22.23, "peso_kg_m": 3.042},
-    "1\"":    {"diametro_mm": 25.4, "peso_kg_m": 3.973},
-    "1 1/8\"": {"diametro_mm": 28.7, "peso_kg_m": 5.060},
-    "1 3/8\"": {"diametro_mm": 35.81, "peso_kg_m": 7.907}
+    "1/4\"": {
+      "diametro_mm": 6.35,
+      "peso_kg_m": 0.25
+    },
+    "3/8\"": {
+      "diametro_mm": 9.53,
+      "peso_kg_m": 0.56
+    },
+    "1/2\"": {
+      "diametro_mm": 12.7,
+      "peso_kg_m": 0.994
+    },
+    "5/8\"": {
+      "diametro_mm": 15.88,
+      "peso_kg_m": 1.552
+    },
+    "3/4\"": {
+      "diametro_mm": 19.05,
+      "peso_kg_m": 2.235
+    },
+    "7/8\"": {
+      "diametro_mm": 22.23,
+      "peso_kg_m": 3.042
+    },
+    "1\"": {
+      "diametro_mm": 25.4,
+      "peso_kg_m": 3.973
+    },
+    "1 1/8\"": {
+      "diametro_mm": 28.7,
+      "peso_kg_m": 5.06
+    },
+    "1 3/8\"": {
+      "diametro_mm": 35.81,
+      "peso_kg_m": 7.907
+    }
   }
 }
