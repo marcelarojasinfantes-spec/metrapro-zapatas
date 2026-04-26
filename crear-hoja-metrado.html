@@ -258,10 +258,10 @@
                     const sheet = context.workbook.worksheets.getActiveWorksheet();
 
                     const anchos = {
-                        'A': 2.57, 'B': 4.0, 'C': 14.14, 'D': 77.86,
-                        'E': 5.57, 'F': 7.29, 'G': 10.71, 'H': 12.29,
-                        'I': 9.43, 'J': 7.14, 'K': 8.29, 'L': 10.0,
-                        'M': 8.0, 'N': 7.0, 'O': 6.86, 'P': 11.0
+                        'A': 2.0, 'B': 3.2, 'C': 11.3, 'D': 62.3,
+                        'E': 4.5, 'F': 5.8, 'G': 8.5, 'H': 9.8,
+                        'I': 7.5, 'J': 5.7, 'K': 6.6, 'L': 8.0,
+                        'M': 6.4, 'N': 5.6, 'O': 5.5, 'P': 8.8
                     };
 
                     for (const col in anchos) {
@@ -270,9 +270,9 @@
                     }
 
                     const alturas = {
-                        1: 15, 2: 15, 3: 18, 4: 5.1, 5: 5.1,
-                        6: 45.75, 7: 18, 8: 18, 9: 18, 10: 18,
-                        11: 5.1, 12: 5.1, 13: 18, 14: 18, 15: 13.5, 16: 12.75
+                        1: 12, 2: 12, 3: 14, 4: 4, 5: 4,
+                        6: 30, 7: 14, 8: 14, 9: 14, 10: 14,
+                        11: 4, 12: 4, 13: 16, 14: 16, 15: 12, 16: 12
                     };
                     for (const r in alturas) {
                         sheet.getRange(`${r}:${r}`).format.rowHeight = alturas[r];
@@ -286,7 +286,7 @@
                     sheet.getRange('C3').values = [['SUSTENTO DE METRADOS']];
                     const tituloFmt = sheet.getRange('C3:P3').format;
                     tituloFmt.font.name = 'Arial Black';
-                    tituloFmt.font.size = 10;
+                    tituloFmt.font.size = 9;
                     tituloFmt.font.bold = false;
                     tituloFmt.horizontalAlignment = 'Center';
                     tituloFmt.verticalAlignment = 'Center';
