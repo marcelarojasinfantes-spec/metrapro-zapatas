@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetraPro · Roles</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #FAFAF7;
+            color: #2C2C2A;
+            padding: 14px;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .header {
+            border-bottom: 1px solid #E5E3DC;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+        .header h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3C3489;
+            margin-bottom: 3px;
+        }
+        .header p {
+            font-size: 11px;
+            color: #6B6A65;
+        }
+        .badge {
+            display: inline-block;
+            background: #FFF3CD;
+            border: 1px solid #FFC107;
+            color: #856404;
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+        .info-box {
+            background: #E6F1FB;
+            border: 1px solid #B5D4F4;
+            border-radius: 4px;
+            padding: 8px 10px;
+            margin-bottom: 14px;
+            font-size: 11px;
+            color: #0C447C;
+            line-height: 1.5;
+        }
+        .accion-btn {
+            display: block;
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border: 1.5px solid;
+            cursor: pointer;
+            font-family: inherit;
+            text-align: left;
+            transition: all 0.15s;
+            background: white;
+        }
+        .accion-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+        .accion-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .accion-btn .titulo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .accion-btn .desc {
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.4;
+            opacity: 0.85;
+        }
+        .icono {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            text-align: center;
+            line-height: 22px;
+            font-weight: 700;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+        .btn-unidad {
+            border-color: #FAC775;
+            color: #7F6000;
+        }
+        .btn-unidad:hover:not(:disabled) {
+            background: #FFFBEB;
+            border-color: #BA7517;
+        }
+        .btn-unidad .icono {
+            background: #FFF2CC;
+            color: #7F6000;
+            border: 1px solid #FAC775;
+        }
+        .btn-data {
+            border-color: #9FE1CB;
+            color: #085041;
+        }
+        .btn-data:hover:not(:disabled) {
+            background: #F0FBF6;
+            border-color: #1D9E75;
+        }
+        .btn-data .icono {
+            background: #E1F5EE;
+            color: #085041;
+            border: 1px solid #9FE1CB;
+        }
+        .btn-sustento {
+            border-color: #B5D4F4;
+            color: #0C447C;
+        }
+        .btn-sustento:hover:not(:disabled) {
+            background: #F1F7FE;
+            border-color: #185FA5;
+        }
+        .btn-sustento .icono {
+            background: #E6F1FB;
+            color: #0C447C;
+            border: 1px solid #B5D4F4;
+        }
+        .status {
+            margin-top: 12px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            display: none;
+            line-height: 1.5;
+        }
+        .status.success {
+            background: #E6F4EA;
+            color: #1B5E20;
+            border: 1px solid #C0E1C8;
+            display: block;
+        }
+        .status.error {
+            background: #FCE8E6;
+            color: #B71C1C;
+            border: 1px solid #F5C6CB;
+            display: block;
+        }
+        .status.warn {
+            background: #FEF7E6;
+            color: #6B4D03;
+            border: 1px solid #F4D06F;
+            display: block;
+        }
+        .leyenda {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #E5E3DC;
+            font-size: 10px;
+            color: #888780;
+            line-height: 1.6;
+        }
+        .leyenda strong { color: #5F5E5A; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Asignar roles a filas</h1>
+        <p>Pon el cursor en una fila y pulsa el botón correspondiente</p>
+        <div class="badge">v1.0 · Roles · 26-Abr</div>
+    </div>
+
+    <div class="info-box">
+        <strong>Cómo se usa:</strong> Selecciona la fila (clic en cualquier celda) y luego un botón. La herramienta aplica el formato y la fórmula automáticamente.
+    </div>
+
+    <button class="accion-btn btn-unidad" id="btnUnidad">
+        <div class="titulo">
+            <span class="icono">U</span>
+            <span>Marcar como Unidad</span>
+        </div>
+        <div class="desc">La fila se vuelve UNIDAD: formato amarillo, marca col B, fórmula =SUM en Total para sumar las DATA debajo.</div>
+    </button>
+
+    <button class="accion-btn btn-data" id="btnData">
+        <div class="titulo">
+            <span class="icono">D</span>
+            <span>Marcar como Data</span>
+        </div>
+        <div class="desc">La fila se vuelve DATA: celdas amarillas para datos. Detecta la UNIDAD de arriba y aplica la fórmula correcta según su unidad.</div>
+    </button>
+
+    <button class="accion-btn btn-sustento" id="btnSustento">
+        <div class="titulo">
+            <span class="icono">+</span>
+            <span>Agregar Sustento</span>
+        </div>
+        <div class="desc">Inserta una fila DATA nueva debajo de donde tienes el cursor. Hereda el tipo de cálculo de la UNIDAD del bloque y expande su SUM.</div>
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <div class="leyenda">
+        <div><strong>Cómo deduce la fórmula al marcar Data:</strong></div>
+        <div>· UNIDAD m³ → fórmula L×A×H en col M</div>
+        <div>· UNIDAD m² → fórmula L×A en col L</div>
+        <div>· UNIDAD m → fórmula Largo en col K</div>
+        <div>· UNIDAD kg → fórmula L×0.560 (Ø3/8") en col N</div>
+        <div>· UNIDAD und → fórmula Cant×Veces en col O</div>
+        <div style="margin-top: 4px;">Si necesitas otra fórmula, edítala manualmente.</div>
+    </div>
+
+    <script>
+        Office.onReady(() => {
+            document.getElementById('btnUnidad').addEventListener('click', () => marcar('U'));
+            document.getElementById('btnData').addEventListener('click', () => marcar('D'));
+            document.getElementById('btnSustento').addEventListener('click', agregarSustento);
+        });
+
+        function showStatus(msg, tipo) {
+            const el = document.getElementById('status');
+            el.className = 'status ' + tipo;
+            el.textContent = msg;
+            if (tipo === 'success') {
+                setTimeout(() => { el.className = 'status'; }, 4000);
+            }
+        }
+
+        function getColDestino(unidad) {
+            const u = (unidad || '').toLowerCase().trim();
+            if (u === 'm3' || u === 'm³') return { col: 'M', formula: 'm3' };
+            if (u === 'm2' || u === 'm²') return { col: 'L', formula: 'm2' };
+            if (u === 'm' || u === 'ml') return { col: 'K', formula: 'm' };
+            if (u === 'kg') return { col: 'N', formula: 'kg' };
+            if (u === 'und' || u === 'mes' || u === 'glb' || u === 'jgo' || u === 'p2' || u === 'par') return { col: 'O', formula: 'und' };
+            return { col: 'M', formula: 'generico' };
+        }
+
+        function construirFormula(tipo, r) {
+            switch (tipo) {
+                case 'm3': return `=F${r}*G${r}*H${r}*I${r}*J${r}`;
+                case 'm2': return `=F${r}*G${r}*H${r}*J${r}`;
+                case 'm':  return `=F${r}*G${r}*J${r}`;
+                case 'kg': return `=F${r}*G${r}*0.560*J${r}`;
+                case 'und':return `=F${r}*J${r}`;
+                default:   return `=F${r}*G${r}*H${r}*I${r}*J${r}`;
+            }
+        }
+
+        async function buscarUnidadAriba(sheet, context, filaActual) {
+            const rangoB = sheet.getRange(`B18:B${filaActual}`);
+            rangoB.load('values');
+            await context.sync();
+
+            const valores = rangoB.values;
+            for (let i = valores.length - 1; i >= 0; i--) {
+                if ((valores[i][0] || '').toString().trim() === 'U') {
+                    return 18 + i;
+                }
+            }
+            return null;
+        }
+
+        async function recalcularSumUnidad(sheet, context, filaUnidad) {
+            const rangoB = sheet.getRange(`B${filaUnidad + 1}:B${filaUnidad + 50}`);
+            rangoB.load('values');
+            await context.sync();
+
+            let primeraData = null;
+            let ultimaData = null;
+            const valores = rangoB.values;
+            for (let i = 0; i < valores.length; i++) {
+                const marca = (valores[i][0] || '').toString().trim();
+                if (marca === 'D') {
+                    if (primeraData === null) primeraData = filaUnidad + 1 + i;
+                    ultimaData = filaUnidad + 1 + i;
+                } else if (marca === 'U' || marca === 'T' || marca === 'S') {
+                    break;
+                } else if (primeraData !== null && marca === '') {
+                    break;
+                }
+            }
+
+            if (primeraData !== null && ultimaData !== null) {
+                sheet.getRange(`P${filaUnidad}`).formulas = [[`=SUM(P${primeraData}:P${ultimaData})`]];
+            }
+        }
+
+        async function marcar(rol) {
+            try {
+                await Excel.run(async (context) => {
+                    const sheet = context.workbook.worksheets.getActiveWorksheet();
+                    const cell = context.workbook.getActiveCell();
+                    cell.load('rowIndex');
+                    await context.sync();
+                    const r = cell.rowIndex + 1;
+
+                    if (r < 18) {
+                        showStatus('La fila debe estar en la zona de partidas (fila 18 en adelante).', 'warn');
+                        return;
+                    }
+
+                    if (rol === 'U') {
+                        const filaCells = sheet.getRange(`E${r}`).load('values');
+                        await context.sync();
+                        const unidad = filaCells.values[0][0];
+
+                        sheet.getRange(`B${r}`).values = [['U']];
+
+                        const rango = sheet.getRange(`B${r}:Q${r}`);
+                        rango.format.fill.color = '#FFF2CC';
+                        rango.format.font.color = '#7F6000';
+                        rango.format.font.bold = true;
+                        rango.format.font.size = 9;
+                        rango.format.borders.getItem('EdgeBottom').style = 'Continuous';
+                        rango.format.borders.getItem('EdgeBottom').weight = 'Hairline';
+
+                        sheet.getRange(`B${r}`).format.font.color = '#FFFFFF';
+                        sheet.getRange(`B${r}`).format.font.size = 6;
+
+                        await context.sync();
+                        await recalcularSumUnidad(sheet, context, r);
+
+                        showStatus(`✓ Fila ${r} marcada como UNIDAD${unidad ? ' (' + unidad + ')' : ''}.`, 'success');
+
+                    } else if (rol === 'D') {
+                        const filaUnidad = await buscarUnidadAriba(sheet, context, r);
+                        if (filaUnidad === null) {
+                            showStatus(`No encontré una UNIDAD arriba de la fila ${r}. Marca primero la UNIDAD del bloque.`, 'warn');
+                            return;
+                        }
+
+                        const unidadCell = sheet.getRange(`E${filaUnidad}`).load('values');
+                        await context.sync();
+                        const unidad = unidadCell.values[0][0];
+                        const dest = getColDestino(unidad);
+
+                        sheet.getRange(`B${r}`).values = [['D']];
+
+                        const rango = sheet.getRange(`B${r}:Q${r}`);
+                        rango.format.fill.color = '#FFFFFF';
+                        rango.format.font.color = '#404040';
+                        rango.format.font.bold = false;
+                        rango.format.font.size = 9;
+                        rango.format.borders.getItem('EdgeBottom').style = 'Continuous';
+                        rango.format.borders.getItem('EdgeBottom').weight = 'Hairline';
+                        rango.format.borders.getItem('EdgeBottom').color = '#E5E3DC';
+
+                        sheet.getRange(`F${r}:J${r}`).format.fill.color = '#FFFDE7';
+
+                        sheet.getRange(`B${r}`).format.font.color = '#FFFFFF';
+                        sheet.getRange(`B${r}`).format.font.size = 6;
+
+                        const formula = construirFormula(dest.formula, r);
+                        sheet.getRange(`${dest.col}${r}`).formulas = [[formula]];
+
+                        sheet.getRange(`P${r}`).formulas = [[`=K${r}+L${r}+M${r}+N${r}+O${r}`]];
+
+                        await context.sync();
+                        await recalcularSumUnidad(sheet, context, filaUnidad);
+
+                        showStatus(`✓ Fila ${r} marcada como DATA. Fórmula ${dest.formula} aplicada en col ${dest.col}. UNIDAD en fila ${filaUnidad} actualizada.`, 'success');
+
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+                showStatus('Error: ' + (err.message || 'no se pudo marcar'), 'error');
+            }
+        }
+
+        async function agregarSustento() {
+            try {
+                await Excel.run(async (context) => {
+                    const sheet = context.workbook.worksheets.getActiveWorksheet();
+                    const cell = context.workbook.getActiveCell();
+                    cell.load('rowIndex');
+                    await context.sync();
+                    const filaCursor = cell.rowIndex + 1;
+
+                    if (filaCursor < 18) {
+                        showStatus('La fila debe estar en la zona de partidas (18 en adelante).', 'warn');
+                        return;
+                    }
+
+                    const marcaActual = sheet.getRange(`B${filaCursor}`).load('values');
+                    await context.sync();
+                    const marca = (marcaActual.values[0][0] || '').toString().trim();
+
+                    let filaUnidad = null;
+                    if (marca === 'U') {
+                        filaUnidad = filaCursor;
+                    } else {
+                        filaUnidad = await buscarUnidadAriba(sheet, context, filaCursor);
+                        if (filaUnidad === null) {
+                            showStatus(`No encontré una UNIDAD. Coloca el cursor en una fila UNIDAD o DATA de un bloque que ya tenga UNIDAD asignada.`, 'warn');
+                            return;
+                        }
+                    }
+
+                    const filaNueva = filaCursor + 1;
+
+                    const rangoFilaInsertar = sheet.getRange(`${filaNueva}:${filaNueva}`);
+                    rangoFilaInsertar.insert('Down');
+                    await context.sync();
+
+                    const unidadCell = sheet.getRange(`E${filaUnidad}`).load('values');
+                    await context.sync();
+                    const unidad = unidadCell.values[0][0];
+                    const dest = getColDestino(unidad);
+
+                    sheet.getRange(`B${filaNueva}`).values = [['D']];
+
+                    const rango = sheet.getRange(`B${filaNueva}:Q${filaNueva}`);
+                    rango.format.fill.color = '#FFFFFF';
+                    rango.format.font.color = '#404040';
+                    rango.format.font.bold = false;
+                    rango.format.font.size = 9;
+                    rango.format.borders.getItem('EdgeBottom').style = 'Continuous';
+                    rango.format.borders.getItem('EdgeBottom').weight = 'Hairline';
+                    rango.format.borders.getItem('EdgeBottom').color = '#E5E3DC';
+
+                    sheet.getRange(`F${filaNueva}:J${filaNueva}`).format.fill.color = '#FFFDE7';
+
+                    sheet.getRange(`B${filaNueva}`).format.font.color = '#FFFFFF';
+                    sheet.getRange(`B${filaNueva}`).format.font.size = 6;
+
+                    const formula = construirFormula(dest.formula, filaNueva);
+                    sheet.getRange(`${dest.col}${filaNueva}`).formulas = [[formula]];
+
+                    sheet.getRange(`P${filaNueva}`).formulas = [[`=K${filaNueva}+L${filaNueva}+M${filaNueva}+N${filaNueva}+O${filaNueva}`]];
+
+                    sheet.getRange(`F${filaNueva}`).select();
+
+                    await context.sync();
+
+                    const filaUnidadAjustada = filaUnidad >= filaNueva ? filaUnidad : filaUnidad;
+                    await recalcularSumUnidad(sheet, context, filaUnidadAjustada);
+
+                    showStatus(`✓ Fila ${filaNueva} agregada como DATA del bloque (UNIDAD en ${filaUnidadAjustada}). Cursor listo en F${filaNueva}.`, 'success');
+                });
+            } catch (err) {
+                console.error(err);
+                showStatus('Error: ' + (err.message || 'no se pudo agregar sustento'), 'error');
+            }
+        }
+    </script>
+</body>
+</html>
