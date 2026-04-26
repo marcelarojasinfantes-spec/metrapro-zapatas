@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetraPro · Analizar y aplicar</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #FAFAF7;
+            color: #2C2C2A;
+            padding: 14px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .header {
+            border-bottom: 1px solid #E5E3DC;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
+        }
+        .header h1 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #3C3489;
+            margin-bottom: 3px;
+        }
+        .header p {
+            font-size: 11px;
+            color: #6B6A65;
+        }
+        .badge {
+            display: inline-block;
+            background: #FFF3CD;
+            border: 1px solid #FFC107;
+            color: #856404;
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 6px;
+        }
+        .info-box {
+            background: #E6F1FB;
+            border: 1px solid #B5D4F4;
+            border-radius: 4px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            font-size: 12px;
+            color: #0C447C;
+        }
+        .info-box strong {
+            color: #042C53;
+            font-weight: 600;
+        }
+        .reglas {
+            background: white;
+            border: 1px solid #E5E3DC;
+            border-radius: 4px;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+        }
+        .reglas-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5F5E5A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .regla {
+            display: grid;
+            grid-template-columns: 22px 1fr;
+            gap: 8px;
+            font-size: 11px;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+        .nivel-badge {
+            text-align: center;
+            font-weight: 700;
+            border-radius: 2px;
+            padding: 1px 0;
+            font-size: 10px;
+        }
+        .nivel-T { background: #B5D4F4; color: #0C447C; }
+        .nivel-S { background: #E6F1FB; color: #185FA5; border: 0.5px solid #B5D4F4; }
+        .nivel-U { background: #FAEEDA; color: #854F0B; }
+        .nivel-D { background: white; color: #0F6E56; border: 0.5px solid #B4B2A9; }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #2C2C2A;
+            margin-bottom: 4px;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid #D3D1C7;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 12px;
+            color: #2C2C2A;
+            background: white;
+        }
+        input:focus {
+            outline: none;
+            border-color: #3C3489;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .hint {
+            font-size: 10px;
+            color: #888780;
+            margin-top: 2px;
+        }
+        .actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #E5E3DC;
+        }
+        button {
+            flex: 1;
+            padding: 9px 10px;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s;
+        }
+        .btn-primary {
+            background: #3C3489;
+            color: white;
+            border-color: #3C3489;
+        }
+        .btn-primary:hover { background: #2D2569; }
+        .btn-primary:disabled {
+            background: #B4B2A9;
+            border-color: #B4B2A9;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 3px;
+            font-size: 12px;
+            display: none;
+        }
+        .status.success {
+            background: #E6F4EA;
+            color: #1B5E20;
+            border: 1px solid #C0E1C8;
+            display: block;
+        }
+        .status.error {
+            background: #FCE8E6;
+            color: #B71C1C;
+            border: 1px solid #F5C6CB;
+            display: block;
+        }
+        .reporte {
+            background: white;
+            border: 1px solid #E5E3DC;
+            border-radius: 4px;
+            padding: 12px;
+            margin-top: 12px;
+            display: none;
+        }
+        .reporte.visible { display: block; }
+        .reporte-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2C2C2A;
+            margin-bottom: 8px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .stat-card {
+            background: #FAFAF7;
+            border-radius: 3px;
+            padding: 6px 8px;
+            border: 0.5px solid #E5E3DC;
+        }
+        .stat-num {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2C2C2A;
+        }
+        .stat-label {
+            font-size: 10px;
+            color: #888780;
+        }
+        .warning-list {
+            background: #FEF7E6;
+            border: 0.5px solid #F4D06F;
+            border-radius: 3px;
+            padding: 8px 10px;
+            margin-top: 8px;
+            font-size: 11px;
+            color: #6B4D03;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        .warning-list .item {
+            padding: 2px 0;
+            border-bottom: 0.5px dashed #F4D06F;
+        }
+        .warning-list .item:last-child { border-bottom: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Analizar y aplicar formato</h1>
+        <p>Detecta los niveles T/S/U/D de cada fila y aplica el formato profesional automáticamente</p>
+        <div class="badge">v1.0 · Fase 1 · 25-Abr</div>
+    </div>
+
+    <div class="info-box">
+        <strong>Cómo funciona:</strong> Esta herramienta lee tu hoja desde la fila 18 (donde empiezan tus partidas) y analiza columnas C (item), D (descripción), E (unidad), F (cantidad). Cada fila se clasifica en uno de 4 niveles según las reglas de abajo, y se aplica el formato profesional con colores, fórmulas SUM y bloqueo de celdas.
+    </div>
+
+    <div class="reglas">
+        <div class="reglas-title">Reglas de detección automática</div>
+        <div class="regla">
+            <div class="nivel-badge nivel-T">T</div>
+            <div><strong>TÍTULO</strong> · item de 1 nivel (ej: 01) sin unidad</div>
+        </div>
+        <div class="regla">
+            <div class="nivel-badge nivel-S">S</div>
+            <div><strong>SUB</strong> · item de 2+ niveles (ej: 04.01) sin unidad</div>
+        </div>
+        <div class="regla">
+            <div class="nivel-badge nivel-U">U</div>
+            <div><strong>UNIDAD</strong> · item con unidad pero sin cantidad → recibe el TOTAL</div>
+        </div>
+        <div class="regla">
+            <div class="nivel-badge nivel-D">D</div>
+            <div><strong>DATA</strong> · sin item pero con cantidad → suma a la unidad de arriba</div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label for="filaInicio">Fila inicio</label>
+            <input type="number" id="filaInicio" value="18" min="1" />
+            <div class="hint">Por defecto fila 18 (después del encabezado)</div>
+        </div>
+        <div class="form-group">
+            <label for="filaFin">Fila fin (auto-detecta)</label>
+            <input type="number" id="filaFin" placeholder="auto" />
+            <div class="hint">Vacío = hasta última fila usada</div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button type="button" class="btn-primary" id="btnAnalizar">Analizar y aplicar</button>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="reporte" id="reporte">
+        <div class="reporte-title">Resultado del análisis</div>
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-num" id="cnt-T">0</div>
+                <div class="stat-label">Títulos (T)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="cnt-S">0</div>
+                <div class="stat-label">Subs (S)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="cnt-U">0</div>
+                <div class="stat-label">Unidades (U)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="cnt-D">0</div>
+                <div class="stat-label">Data (D)</div>
+            </div>
+        </div>
+        <div id="warningContainer" style="display: none;">
+            <div style="font-size: 11px; font-weight: 600; color: #6B4D03; margin-bottom: 4px;">⚠ Filas no clasificadas:</div>
+            <div class="warning-list" id="warnings"></div>
+        </div>
+    </div>
+
+    <script>
+        Office.onReady(() => {
+            document.getElementById('btnAnalizar').addEventListener('click', analizarYAplicar);
+        });
+
+        function detectarNivel(item, unidad, cantidad) {
+            const tieneItem = item != null && String(item).trim() !== '';
+            const tieneUnidad = unidad != null && String(unidad).trim() !== '';
+            const tieneCantidad = cantidad != null && cantidad !== '' && !isNaN(parseFloat(cantidad));
+
+            if (!tieneItem && tieneCantidad) return 'D';
+
+            if (tieneItem && tieneUnidad && !tieneCantidad) return 'U';
+
+            if (tieneItem && !tieneUnidad) {
+                const itemStr = String(item).trim();
+                const niveles = itemStr.split('.').filter(p => p.trim() !== '').length;
+                return niveles === 1 ? 'T' : 'S';
+            }
+
+            if (tieneItem && tieneUnidad && tieneCantidad) return 'U';
+
+            return null;
+        }
+
+        async function analizarYAplicar() {
+            const status = document.getElementById('status');
+            const reporte = document.getElementById('reporte');
+            const btn = document.getElementById('btnAnalizar');
+            
+            status.className = 'status';
+            reporte.classList.remove('visible');
+            btn.disabled = true;
+            btn.textContent = 'Analizando...';
+
+            try {
+                await Excel.run(async (context) => {
+                    const sheet = context.workbook.worksheets.getActiveWorksheet();
+                    
+                    let filaInicio = parseInt(document.getElementById('filaInicio').value) || 18;
+                    let filaFin = parseInt(document.getElementById('filaFin').value);
+
+                    if (!filaFin) {
+                        const usedRange = sheet.getUsedRange(true);
+                        usedRange.load(['rowCount', 'rowIndex']);
+                        await context.sync();
+                        filaFin = usedRange.rowIndex + usedRange.rowCount;
+                    }
+
+                    const numFilas = filaFin - filaInicio + 1;
+                    if (numFilas < 1) {
+                        throw new Error('Rango inválido. Fila fin debe ser mayor o igual a fila inicio.');
+                    }
+
+                    const datos = sheet.getRange(`C${filaInicio}:F${filaFin}`).load(['values']);
+                    await context.sync();
+
+                    const niveles = [];
+                    const filasNoClasificadas = [];
+                    const stats = { T: 0, S: 0, U: 0, D: 0, vacias: 0 };
+
+                    for (let i = 0; i < datos.values.length; i++) {
+                        const fila = datos.values[i];
+                        const [item, desc, und, cant] = fila;
+                        const filaReal = filaInicio + i;
+
+                        const sinNada = (item == null || String(item).trim() === '') &&
+                                        (desc == null || String(desc).trim() === '') &&
+                                        (und == null || String(und).trim() === '') &&
+                                        (cant == null || String(cant).trim() === '');
+                        if (sinNada) {
+                            niveles.push(null);
+                            stats.vacias++;
+                            continue;
+                        }
+
+                        const nivel = detectarNivel(item, und, cant);
+                        niveles.push(nivel);
+
+                        if (nivel === null) {
+                            filasNoClasificadas.push({
+                                fila: filaReal,
+                                desc: String(desc || '').substring(0, 40)
+                            });
+                        } else {
+                            stats[nivel]++;
+                        }
+                    }
+
+                    const marcasB = niveles.map(n => [n || '']);
+                    sheet.getRange(`B${filaInicio}:B${filaFin}`).values = marcasB;
+
+                    let unidadActual = null;
+                    let unidadFila = null;
+                    let dataInicio = null;
+
+                    for (let i = 0; i < niveles.length; i++) {
+                        const nivel = niveles[i];
+                        const filaReal = filaInicio + i;
+                        const rangoFila = sheet.getRange(`B${filaReal}:Q${filaReal}`);
+
+                        if (nivel === 'T') {
+                            if (unidadActual && unidadFila && dataInicio && dataInicio < filaReal) {
+                                sheet.getRange(`P${unidadFila}`).formulas = [[`=SUM(P${dataInicio}:P${filaReal - 1})`]];
+                            }
+                            unidadActual = null;
+                            unidadFila = null;
+                            dataInicio = null;
+
+                            rangoFila.format.fill.color = '#1F3864';
+                            rangoFila.format.font.color = '#FFFFFF';
+                            rangoFila.format.font.bold = true;
+                            rangoFila.format.font.size = 10;
+                        } else if (nivel === 'S') {
+                            if (unidadActual && unidadFila && dataInicio && dataInicio < filaReal) {
+                                sheet.getRange(`P${unidadFila}`).formulas = [[`=SUM(P${dataInicio}:P${filaReal - 1})`]];
+                            }
+                            unidadActual = null;
+                            unidadFila = null;
+                            dataInicio = null;
+
+                            rangoFila.format.fill.color = '#D9E1F2';
+                            rangoFila.format.font.color = '#1F3864';
+                            rangoFila.format.font.bold = true;
+                            rangoFila.format.font.size = 9;
+                        } else if (nivel === 'U') {
+                            if (unidadActual && unidadFila && dataInicio && dataInicio < filaReal) {
+                                sheet.getRange(`P${unidadFila}`).formulas = [[`=SUM(P${dataInicio}:P${filaReal - 1})`]];
+                            }
+                            unidadActual = filaReal;
+                            unidadFila = filaReal;
+                            dataInicio = null;
+
+                            rangoFila.format.fill.color = '#FFF2CC';
+                            rangoFila.format.font.color = '#7F6000';
+                            rangoFila.format.font.bold = true;
+                            rangoFila.format.font.size = 9;
+
+                            sheet.getRange(`F${filaReal}:O${filaReal}`).format.fill.color = '#FFE699';
+                        } else if (nivel === 'D') {
+                            if (dataInicio === null) dataInicio = filaReal;
+
+                            rangoFila.format.fill.color = '#FFFFFF';
+                            rangoFila.format.font.color = '#404040';
+                            rangoFila.format.font.bold = false;
+                            rangoFila.format.font.size = 9;
+                            rangoFila.format.font.italic = false;
+
+                            sheet.getRange(`F${filaReal}:J${filaReal}`).format.fill.color = '#FFFDE7';
+
+                            sheet.getRange(`P${filaReal}`).formulas = [[`=K${filaReal}+L${filaReal}+M${filaReal}+N${filaReal}+O${filaReal}`]];
+                        }
+                    }
+
+                    if (unidadActual && unidadFila && dataInicio && dataInicio <= filaFin) {
+                        sheet.getRange(`P${unidadFila}`).formulas = [[`=SUM(P${dataInicio}:P${filaFin})`]];
+                    }
+
+                    sheet.getRange(`B${filaInicio}:B${filaFin}`).format.font.color = '#FFFFFF';
+                    sheet.getRange(`B${filaInicio}:B${filaFin}`).format.font.size = 6;
+
+                    sheet.getRange('A1').select();
+                    await context.sync();
+
+                    document.getElementById('cnt-T').textContent = stats.T;
+                    document.getElementById('cnt-S').textContent = stats.S;
+                    document.getElementById('cnt-U').textContent = stats.U;
+                    document.getElementById('cnt-D').textContent = stats.D;
+
+                    const warningContainer = document.getElementById('warningContainer');
+                    const warnings = document.getElementById('warnings');
+                    warnings.innerHTML = '';
+
+                    if (filasNoClasificadas.length > 0) {
+                        filasNoClasificadas.forEach(f => {
+                            const div = document.createElement('div');
+                            div.className = 'item';
+                            div.textContent = `Fila ${f.fila}: ${f.desc || '(sin descripción)'}`;
+                            warnings.appendChild(div);
+                        });
+                        warningContainer.style.display = 'block';
+                    } else {
+                        warningContainer.style.display = 'none';
+                    }
+
+                    reporte.classList.add('visible');
+
+                    const total = stats.T + stats.S + stats.U + stats.D;
+                    status.className = 'status success';
+                    status.textContent = `✓ Procesadas ${total} filas en ${numFilas - stats.vacias} líneas con datos · ${new Date().toLocaleTimeString()}`;
+                });
+
+                btn.textContent = 'Analizar y aplicar';
+                btn.disabled = false;
+
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = 'Error: ' + (error.message || 'No se pudo analizar');
+                btn.textContent = 'Analizar y aplicar';
+                btn.disabled = false;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
