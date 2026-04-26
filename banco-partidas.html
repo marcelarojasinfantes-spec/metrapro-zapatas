@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetraPro · Banco de partidas</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #FAFAF7;
+            color: #2C2C2A;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .header {
+            padding: 12px 14px 10px;
+            border-bottom: 1px solid #E5E3DC;
+            background: white;
+            flex-shrink: 0;
+        }
+        .header h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #3C3489;
+            margin-bottom: 2px;
+        }
+        .header p {
+            font-size: 11px;
+            color: #6B6A65;
+            margin-bottom: 4px;
+        }
+        .badge {
+            display: inline-block;
+            background: #FFF3CD;
+            border: 1px solid #FFC107;
+            color: #856404;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        .controls {
+            padding: 8px 14px;
+            background: white;
+            border-bottom: 1px solid #E5E3DC;
+            flex-shrink: 0;
+        }
+        .search-box {
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 6px 10px 6px 28px;
+            border: 1px solid #D3D1C7;
+            border-radius: 3px;
+            font-family: inherit;
+            font-size: 12px;
+            background: white;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #3C3489;
+        }
+        .search-box::before {
+            content: "";
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 12px;
+            height: 12px;
+            border: 1.5px solid #888780;
+            border-radius: 50%;
+        }
+        .search-box::after {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 19px;
+            width: 6px;
+            height: 1.5px;
+            background: #888780;
+            transform: rotate(45deg);
+        }
+        .chips {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .chip {
+            padding: 3px 9px;
+            font-size: 10px;
+            border: 1px solid #D3D1C7;
+            border-radius: 12px;
+            background: white;
+            color: #5F5E5A;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s;
+        }
+        .chip:hover {
+            background: #F5F4EE;
+        }
+        .chip.active {
+            background: #3C3489;
+            color: white;
+            border-color: #3C3489;
+        }
+        .lista {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+        }
+        .cat-header {
+            padding: 5px 14px;
+            background: #EEEDFE;
+            border-bottom: 0.5px solid #CECBF6;
+            font-size: 11px;
+            font-weight: 700;
+            color: #3C3489;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cat-header .count {
+            font-weight: 400;
+            color: #888780;
+            font-size: 10px;
+        }
+        .cat-header .toggle-cat {
+            font-size: 10px;
+            color: #3C3489;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-left: 8px;
+        }
+        .partida {
+            padding: 5px 14px;
+            border-bottom: 0.5px solid #F1EFE8;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .partida:hover {
+            background: #FAFAF7;
+        }
+        .partida.selected {
+            background: #FFF8E1;
+        }
+        .partida input[type="checkbox"] {
+            margin: 2px 0 0 0;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .partida-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .partida-desc {
+            font-size: 11px;
+            font-weight: 500;
+            color: #2C2C2A;
+            line-height: 1.3;
+            margin-bottom: 1px;
+        }
+        .partida-meta {
+            font-size: 10px;
+            color: #888780;
+        }
+        .unidad-badge {
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 2px;
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 28px;
+            text-align: center;
+            margin-top: 1px;
+        }
+        .u-m3 { background: #FAEEDA; color: #854F0B; }
+        .u-m2 { background: #E1F5EE; color: #085041; }
+        .u-m { background: #E6F1FB; color: #0C447C; }
+        .u-kg { background: #FAECE7; color: #993C1D; }
+        .u-und { background: #EEEDFE; color: #3C3489; }
+        .u-glb { background: #F1EFE8; color: #5F5E5A; }
+        .footer {
+            padding: 10px 14px;
+            background: #F1EFE8;
+            border-top: 1px solid #D3D1C7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .footer-info {
+            font-size: 11px;
+            color: #5F5E5A;
+        }
+        .footer-info strong {
+            color: #3C3489;
+        }
+        .btn-primary {
+            padding: 7px 14px;
+            background: #3C3489;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .btn-primary:hover { background: #2D2569; }
+        .btn-primary:disabled {
+            background: #B4B2A9;
+            cursor: not-allowed;
+        }
+        .loading {
+            padding: 40px 20px;
+            text-align: center;
+            color: #888780;
+        }
+        .error {
+            padding: 14px;
+            margin: 10px 14px;
+            background: #FCE8E6;
+            border: 1px solid #F5C6CB;
+            color: #B71C1C;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        .status {
+            margin: 8px 14px 0;
+            padding: 8px 10px;
+            border-radius: 3px;
+            font-size: 11px;
+            display: none;
+        }
+        .status.success {
+            background: #E6F4EA;
+            color: #1B5E20;
+            border: 1px solid #C0E1C8;
+            display: block;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .modal-overlay.visible { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 6px;
+            padding: 16px;
+            max-width: 280px;
+            width: 90%;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+        }
+        .modal h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2C2C2A;
+            margin-bottom: 8px;
+        }
+        .modal p {
+            font-size: 12px;
+            color: #5F5E5A;
+            margin-bottom: 12px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+        .modal button {
+            padding: 6px 12px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid;
+            font-family: inherit;
+        }
+        .modal .btn-cancel {
+            background: white;
+            color: #5F5E5A;
+            border-color: #D3D1C7;
+        }
+        .modal .btn-confirm {
+            background: #3C3489;
+            color: white;
+            border-color: #3C3489;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Banco de partidas — Estructuras</h1>
+        <p>Selecciona partidas y haz clic en Importar</p>
+        <span class="badge" id="versionBadge">cargando...</span>
+    </div>
+
+    <div class="controls" id="controls" style="display: none;">
+        <div class="search-box">
+            <input type="text" id="busqueda" placeholder="Buscar... (zapata, encofrado, fc=210)" />
+        </div>
+        <div class="chips" id="chips"></div>
+    </div>
+
+    <div class="lista" id="lista">
+        <div class="loading">Cargando base de datos...</div>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <div class="footer">
+        <div class="footer-info">
+            <strong id="seleccionadas">0</strong> de <span id="total">0</span> seleccionadas
+        </div>
+        <button class="btn-primary" id="btnImportar" disabled>Importar</button>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h3>¿Dónde insertar las partidas?</h3>
+            <p id="modalMsg">Se insertarán <strong id="modalCount">0</strong> partidas en la fila <strong id="modalRow">?</strong> de la hoja activa.</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" id="btnCancelar">Cancelar</button>
+                <button class="btn-confirm" id="btnConfirmar">Insertar aquí</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const JSON_URL = 'https://marcelarojasinfantes-spec.github.io/metrapro-zapatas/partidas-estructuras.json';
+        
+        let baseDatos = null;
+        let filtroCategoria = 'todas';
+        let filtroBusqueda = '';
+        let seleccionadas = new Set();
+        let filaCursor = null;
+
+        Office.onReady(() => {
+            cargarBaseDatos();
+            
+            document.getElementById('busqueda').addEventListener('input', (e) => {
+                filtroBusqueda = e.target.value.toLowerCase().trim();
+                renderLista();
+            });
+            
+            document.getElementById('btnImportar').addEventListener('click', preImportar);
+            document.getElementById('btnCancelar').addEventListener('click', () => {
+                document.getElementById('modal').classList.remove('visible');
+            });
+            document.getElementById('btnConfirmar').addEventListener('click', confirmarImportar);
+        });
+
+        async function cargarBaseDatos() {
+            try {
+                const res = await fetch(JSON_URL + '?t=' + Date.now());
+                if (!res.ok) throw new Error('No se pudo descargar el JSON desde GitHub');
+                baseDatos = await res.json();
+                
+                document.getElementById('versionBadge').textContent = `v${baseDatos.version} · ${baseDatos.partidas.length} partidas`;
+                document.getElementById('total').textContent = baseDatos.partidas.length;
+                document.getElementById('controls').style.display = 'block';
+                
+                renderChips();
+                renderLista();
+            } catch (err) {
+                document.getElementById('lista').innerHTML = `
+                    <div class="error">
+                        <strong>Error al cargar el banco:</strong><br>
+                        ${err.message}<br><br>
+                        Verifica que el archivo <code>partidas-estructuras.json</code> esté publicado en tu repositorio de GitHub Pages.
+                    </div>
+                `;
+            }
+        }
+
+        function renderChips() {
+            const cont = document.getElementById('chips');
+            cont.innerHTML = '';
+            
+            const chipTodas = document.createElement('span');
+            chipTodas.className = 'chip active';
+            chipTodas.textContent = 'Todas';
+            chipTodas.onclick = () => seleccionarChip('todas', chipTodas);
+            cont.appendChild(chipTodas);
+            
+            baseDatos.categorias.forEach(cat => {
+                const count = baseDatos.partidas.filter(p => p.categoria === cat.codigo).length;
+                const chip = document.createElement('span');
+                chip.className = 'chip';
+                chip.textContent = `${cat.codigo} (${count})`;
+                chip.title = cat.nombre;
+                chip.onclick = () => seleccionarChip(cat.codigo, chip);
+                cont.appendChild(chip);
+            });
+        }
+
+        function seleccionarChip(cat, elem) {
+            filtroCategoria = cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+            elem.classList.add('active');
+            renderLista();
+        }
+
+        function getUnidadClass(und) {
+            if (und === 'm³') return 'u-m3';
+            if (und === 'm²') return 'u-m2';
+            if (und === 'm') return 'u-m';
+            if (und === 'kg') return 'u-kg';
+            if (und === 'und' || und === 'mes') return 'u-und';
+            return 'u-glb';
+        }
+
+        function renderLista() {
+            const cont = document.getElementById('lista');
+            cont.innerHTML = '';
+            
+            let partidasFiltradas = baseDatos.partidas;
+            
+            if (filtroCategoria !== 'todas') {
+                partidasFiltradas = partidasFiltradas.filter(p => p.categoria === filtroCategoria);
+            }
+            
+            if (filtroBusqueda) {
+                partidasFiltradas = partidasFiltradas.filter(p => {
+                    const haystack = (p.descripcion + ' ' + p.codigo + ' ' + (p.palabras_clave || '') + ' ' + p.subcategoria).toLowerCase();
+                    return haystack.includes(filtroBusqueda);
+                });
+            }
+            
+            if (partidasFiltradas.length === 0) {
+                cont.innerHTML = '<div class="loading">No se encontraron partidas con ese filtro</div>';
+                return;
+            }
+            
+            const grupos = {};
+            partidasFiltradas.forEach(p => {
+                const key = p.subcategoria;
+                if (!grupos[key]) grupos[key] = [];
+                grupos[key].push(p);
+            });
+            
+            Object.keys(grupos).forEach(subcat => {
+                const partidas = grupos[subcat];
+                const cat = baseDatos.categorias.find(c => c.codigo === partidas[0].categoria);
+                
+                const header = document.createElement('div');
+                header.className = 'cat-header';
+                header.innerHTML = `
+                    <span>${cat.codigo} · ${subcat}</span>
+                    <span>
+                        <span class="count">${partidas.length}</span>
+                        <span class="toggle-cat" data-subcat="${subcat}">marcar todos</span>
+                    </span>
+                `;
+                cont.appendChild(header);
+                
+                header.querySelector('.toggle-cat').addEventListener('click', () => {
+                    const todasSelec = partidas.every(p => seleccionadas.has(p.codigo));
+                    partidas.forEach(p => {
+                        if (todasSelec) seleccionadas.delete(p.codigo);
+                        else seleccionadas.add(p.codigo);
+                    });
+                    renderLista();
+                    actualizarContadores();
+                });
+                
+                partidas.forEach(p => {
+                    const row = document.createElement('div');
+                    row.className = 'partida' + (seleccionadas.has(p.codigo) ? ' selected' : '');
+                    row.innerHTML = `
+                        <input type="checkbox" ${seleccionadas.has(p.codigo) ? 'checked' : ''} />
+                        <div class="partida-info">
+                            <div class="partida-desc">${p.descripcion}</div>
+                            <div class="partida-meta">${p.codigo} · ${p.tipo_calculo}</div>
+                        </div>
+                        <span class="unidad-badge ${getUnidadClass(p.unidad)}">${p.unidad}</span>
+                    `;
+                    
+                    const checkbox = row.querySelector('input');
+                    
+                    row.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'INPUT') {
+                            checkbox.checked = !checkbox.checked;
+                        }
+                        if (checkbox.checked) {
+                            seleccionadas.add(p.codigo);
+                            row.classList.add('selected');
+                        } else {
+                            seleccionadas.delete(p.codigo);
+                            row.classList.remove('selected');
+                        }
+                        actualizarContadores();
+                    });
+                    
+                    cont.appendChild(row);
+                });
+            });
+            
+            actualizarContadores();
+        }
+
+        function actualizarContadores() {
+            document.getElementById('seleccionadas').textContent = seleccionadas.size;
+            document.getElementById('btnImportar').disabled = seleccionadas.size === 0;
+            document.getElementById('btnImportar').textContent = `Importar ${seleccionadas.size > 0 ? '(' + seleccionadas.size + ')' : ''}`;
+        }
+
+        async function preImportar() {
+            try {
+                await Excel.run(async (context) => {
+                    const sel = context.workbook.getActiveCell();
+                    sel.load('rowIndex');
+                    await context.sync();
+                    filaCursor = sel.rowIndex + 1;
+                });
+                
+                document.getElementById('modalCount').textContent = seleccionadas.size;
+                document.getElementById('modalRow').textContent = filaCursor;
+                document.getElementById('modalMsg').innerHTML = `Se insertarán <strong>${seleccionadas.size}</strong> partidas (${seleccionadas.size * 2} filas en total: 1 UNIDAD + 1 DATA por partida) a partir de la fila <strong>${filaCursor}</strong>.<br><br>Asegúrate de que esa zona esté vacía antes de continuar.`;
+                document.getElementById('modal').classList.add('visible');
+            } catch (err) {
+                console.error(err);
+                mostrarStatus('Error al detectar la celda activa: ' + err.message, false);
+            }
+        }
+
+        async function confirmarImportar() {
+            document.getElementById('modal').classList.remove('visible');
+            const btn = document.getElementById('btnImportar');
+            btn.disabled = true;
+            btn.textContent = 'Insertando...';
+            
+            try {
+                const partidasSelec = baseDatos.partidas.filter(p => seleccionadas.has(p.codigo));
+                
+                await Excel.run(async (context) => {
+                    const sheet = context.workbook.worksheets.getActiveWorksheet();
+                    let r = filaCursor;
+                    
+                    for (const p of partidasSelec) {
+                        sheet.getRange(`B${r}`).values = [['U']];
+                        sheet.getRange(`C${r}`).values = [[p.codigo]];
+                        sheet.getRange(`D${r}`).values = [[p.descripcion]];
+                        sheet.getRange(`E${r}`).values = [[p.unidad]];
+                        sheet.getRange(`P${r}`).formulas = [[`=SUM(P${r+1}:P${r+1})`]];
+                        
+                        const rangoU = sheet.getRange(`B${r}:Q${r}`);
+                        rangoU.format.fill.color = '#FFF2CC';
+                        rangoU.format.font.color = '#7F6000';
+                        rangoU.format.font.bold = true;
+                        rangoU.format.font.size = 9;
+                        rangoU.format.borders.getItem('EdgeBottom').style = 'Continuous';
+                        rangoU.format.borders.getItem('EdgeBottom').weight = 'Hairline';
+                        sheet.getRange(`F${r}:O${r}`).format.fill.color = '#FFE699';
+                        
+                        const rData = r + 1;
+                        sheet.getRange(`B${rData}`).values = [['D']];
+                        
+                        const colDestino = getColDestino(p.tipo_calculo);
+                        const formula = construirFormula(p.tipo_calculo, rData);
+                        if (colDestino && formula) {
+                            sheet.getRange(`${colDestino}${rData}`).formulas = [[formula]];
+                        }
+                        sheet.getRange(`P${rData}`).formulas = [[`=K${rData}+L${rData}+M${rData}+N${rData}+O${rData}`]];
+                        
+                        const rangoD = sheet.getRange(`B${rData}:Q${rData}`);
+                        rangoD.format.fill.color = '#FFFFFF';
+                        rangoD.format.font.color = '#404040';
+                        rangoD.format.font.bold = false;
+                        rangoD.format.font.size = 9;
+                        rangoD.format.borders.getItem('EdgeBottom').style = 'Continuous';
+                        rangoD.format.borders.getItem('EdgeBottom').weight = 'Hairline';
+                        sheet.getRange(`F${rData}:J${rData}`).format.fill.color = '#FFFDE7';
+                        
+                        sheet.getRange(`F${rData}`).values = [[1]];
+                        sheet.getRange(`J${rData}`).values = [[1]];
+                        
+                        sheet.getRange(`B${r}:B${rData}`).format.font.color = '#FFFFFF';
+                        sheet.getRange(`B${r}:B${rData}`).format.font.size = 6;
+                        
+                        r += 2;
+                    }
+                    
+                    sheet.getRange(`C${filaCursor}`).select();
+                    await context.sync();
+                });
+                
+                mostrarStatus(`✓ ${partidasSelec.length} partidas insertadas (${partidasSelec.length * 2} filas) desde la fila ${filaCursor} · ${new Date().toLocaleTimeString()}`, true);
+                
+                seleccionadas.clear();
+                renderLista();
+                
+            } catch (err) {
+                console.error(err);
+                mostrarStatus('Error al insertar: ' + err.message, false);
+            } finally {
+                btn.disabled = false;
+                actualizarContadores();
+            }
+        }
+
+        function getColDestino(tipo) {
+            if (tipo === 'und_cant' || tipo === 'glb') return 'O';
+            if (tipo === 'm_largo' || tipo === 'm_tramos') return 'K';
+            if (tipo.startsWith('m2_')) return 'L';
+            if (tipo.startsWith('m3_')) return 'M';
+            if (tipo === 'kg_acero') return 'N';
+            return null;
+        }
+
+        function construirFormula(tipo, r) {
+            switch(tipo) {
+                case 'und_cant': return `=F${r}*J${r}`;
+                case 'glb': return `=F${r}`;
+                case 'm_largo': return `=F${r}*G${r}*J${r}`;
+                case 'm2_largo_ancho': return `=F${r}*G${r}*H${r}*J${r}`;
+                case 'm2_perimetro_alt': return `=F${r}*2*(G${r}+H${r})*I${r}*J${r}`;
+                case 'm2_lateral': return `=F${r}*(2*G${r}+2*H${r})*I${r}*J${r}`;
+                case 'm3_l_a_h': return `=F${r}*G${r}*H${r}*I${r}*J${r}`;
+                case 'm3_area_esp': return `=F${r}*G${r}*H${r}*I${r}*J${r}`;
+                case 'kg_acero': return `=F${r}*G${r}*0.560*J${r}`;
+                default: return null;
+            }
+        }
+
+        function mostrarStatus(msg, exito) {
+            const el = document.getElementById('status');
+            el.className = 'status ' + (exito ? 'success' : 'error');
+            el.textContent = msg;
+            if (exito) {
+                setTimeout(() => { el.className = 'status'; }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
