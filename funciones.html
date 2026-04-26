@@ -98,6 +98,98 @@ async function nivel7(event) { return aplicarNivel(7, event); }
 async function nivel8(event) { return aplicarNivel(8, event); }
 async function nivel9(event) { return aplicarNivel(9, event); }
 
+async function insertarFilaArriba(event) {
+    try {
+        await Excel.run(async (context) => {
+            const sheet = context.workbook.worksheets.getActiveWorksheet();
+            const cell = context.workbook.getActiveCell();
+            cell.load('rowIndex');
+            await context.sync();
+            const r = cell.rowIndex + 1;
+            if (r < 1) {
+                notificarError('Selecciona una fila válida primero.');
+                event.completed();
+                return;
+            }
+            sheet.getRange(`${r}:${r}`).insert('Down');
+            sheet.getRange(`C${r}`).select();
+            await context.sync();
+        });
+    } catch (err) {
+        console.error(err);
+        notificarError('No se pudo insertar fila arriba: ' + err.message);
+    } finally {
+        event.completed();
+    }
+}
+
+async function insertarFilaAbajo(event) {
+    try {
+        await Excel.run(async (context) => {
+            const sheet = context.workbook.worksheets.getActiveWorksheet();
+            const cell = context.workbook.getActiveCell();
+            cell.load('rowIndex');
+            await context.sync();
+            const r = cell.rowIndex + 1;
+            const filaNueva = r + 1;
+            if (r < 1) {
+                notificarError('Selecciona una fila válida primero.');
+                event.completed();
+                return;
+            }
+            sheet.getRange(`${filaNueva}:${filaNueva}`).insert('Down');
+            sheet.getRange(`C${filaNueva}`).select();
+            await context.sync();
+        });
+    } catch (err) {
+        console.error(err);
+        notificarError('No se pudo insertar fila abajo: ' + err.message);
+    } finally {
+        event.completed();
+    }
+}
+
+async function generarSustentoN9(event) {
+    try {
+        await Excel.run(async (context) => {
+            const sheet = context.workbook.worksheets.getActiveWorksheet();
+            const cell = context.workbook.getActiveCell();
+            cell.load('rowIndex');
+            await context.sync();
+            const r = cell.rowIndex + 1;
+            const filaNueva = r + 1;
+            if (r < 1) {
+                notificarError('Selecciona una fila válida primero.');
+                event.completed();
+                return;
+            }
+            sheet.getRange(`${filaNueva}:${filaNueva}`).insert('Down');
+
+            const config = NIVELES[9];
+            const rangoCD = sheet.getRange(`C${filaNueva}:D${filaNueva}`);
+            rangoCD.format.font.color = config.color;
+            rangoCD.format.font.size = config.size;
+            rangoCD.format.font.bold = config.bold;
+            rangoCD.format.font.italic = config.italic;
+
+            sheet.getRange(`C${filaNueva}`).format.horizontalAlignment = 'Left';
+            sheet.getRange(`D${filaNueva}`).format.horizontalAlignment = 'Left';
+
+            sheet.getRange(`B${filaNueva}`).values = [['N9']];
+            sheet.getRange(`B${filaNueva}`).format.font.color = '#FFFFFF';
+            sheet.getRange(`B${filaNueva}`).format.font.size = 6;
+
+            sheet.getRange(`D${filaNueva}`).select();
+            await context.sync();
+        });
+    } catch (err) {
+        console.error(err);
+        notificarError('No se pudo generar sustento N9: ' + err.message);
+    } finally {
+        event.completed();
+    }
+}
+
 Office.actions.associate('nivel1', nivel1);
 Office.actions.associate('nivel2', nivel2);
 Office.actions.associate('nivel3', nivel3);
@@ -107,6 +199,9 @@ Office.actions.associate('nivel6', nivel6);
 Office.actions.associate('nivel7', nivel7);
 Office.actions.associate('nivel8', nivel8);
 Office.actions.associate('nivel9', nivel9);
+Office.actions.associate('insertarFilaArriba', insertarFilaArriba);
+Office.actions.associate('insertarFilaAbajo', insertarFilaAbajo);
+Office.actions.associate('generarSustentoN9', generarSustentoN9);
 </script>
 </body>
 </html>
