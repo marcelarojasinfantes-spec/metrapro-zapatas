@@ -2,111 +2,64 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>MetraPro Funciones</title>
+    <title>MetraPro Niveles</title>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 </head>
 <body>
 <script>
 Office.onReady(() => {});
 
-function getColDestino(unidad) {
-    const u = (unidad || '').toString().toLowerCase().trim();
-    if (u === 'm3' || u === 'm³') return { col: 'M', formula: 'm3' };
-    if (u === 'm2' || u === 'm²') return { col: 'L', formula: 'm2' };
-    if (u === 'm' || u === 'ml') return { col: 'K', formula: 'm' };
-    if (u === 'kg') return { col: 'N', formula: 'kg' };
-    if (u === 'und' || u === 'mes' || u === 'glb' || u === 'jgo' || u === 'p2' || u === 'par') {
-        return { col: 'O', formula: 'und' };
-    }
-    return { col: 'M', formula: 'm3' };
-}
+const NIVELES = {
+    1: { color: '#0F766E', size: 12, bold: true,  italic: false },
+    2: { color: '#3730A3', size: 12, bold: true,  italic: false },
+    3: { color: '#EA580C', size: 11, bold: true,  italic: false },
+    4: { color: '#9D174D', size: 11, bold: true,  italic: false },
+    5: { color: '#374151', size: 10, bold: false, italic: false },
+    6: { color: '#9CA3AF', size: 9,  bold: false, italic: true  }
+};
 
-function construirFormula(tipo, r) {
-    switch (tipo) {
-        case 'm3': return `=F${r}*G${r}*H${r}*I${r}*J${r}`;
-        case 'm2': return `=F${r}*G${r}*H${r}*J${r}`;
-        case 'm':  return `=F${r}*G${r}*J${r}`;
-        case 'kg': return `=F${r}*G${r}*0.560*J${r}`;
-        case 'und':return `=F${r}*J${r}`;
-        default:   return `=F${r}*G${r}*H${r}*I${r}*J${r}`;
-    }
-}
-
-async function buscarUnidadArriba(sheet, context, filaActual) {
-    const rangoB = sheet.getRange(`B18:B${filaActual}`);
-    rangoB.load('values');
-    await context.sync();
-    const valores = rangoB.values;
-    for (let i = valores.length - 1; i >= 0; i--) {
-        if ((valores[i][0] || '').toString().trim() === 'U') {
-            return 18 + i;
-        }
-    }
-    return null;
-}
-
-async function recalcularSumUnidad(sheet, context, filaUnidad) {
-    const rangoB = sheet.getRange(`B${filaUnidad + 1}:B${filaUnidad + 100}`);
-    rangoB.load('values');
-    await context.sync();
-    let primeraData = null;
-    let ultimaData = null;
-    const valores = rangoB.values;
-    for (let i = 0; i < valores.length; i++) {
-        const marca = (valores[i][0] || '').toString().trim();
-        if (marca === 'D') {
-            if (primeraData === null) primeraData = filaUnidad + 1 + i;
-            ultimaData = filaUnidad + 1 + i;
-        } else if (marca === 'U' || marca === 'T' || marca === 'S') {
-            break;
-        }
-    }
-    if (primeraData !== null && ultimaData !== null) {
-        sheet.getRange(`P${filaUnidad}`).formulas = [[`=SUM(P${primeraData}:P${ultimaData})`]];
-    } else {
-        sheet.getRange(`P${filaUnidad}`).formulas = [[`0`]];
-    }
-}
-
-function notificar(mensaje, esError) {
-    if (esError) {
-        try {
-            Office.context.ui.displayDialogAsync(
-                'data:text/html,' + encodeURIComponent(`
-                    <html><head><style>
-                        body{font-family:'Segoe UI',sans-serif;padding:20px;background:#FAFAF7;}
-                        .icon{font-size:32px;color:#C53030;}
-                        h2{font-size:14px;color:#2C2C2A;margin:8px 0;}
-                        p{font-size:12px;color:#5F5E5A;line-height:1.5;}
-                        button{background:#3C3489;color:white;border:none;padding:6px 16px;border-radius:3px;font-size:12px;cursor:pointer;margin-top:12px;}
-                    </style></head>
-                    <body>
-                        <div class="icon">⚠</div>
-                        <h2>MetraPro</h2>
-                        <p>${mensaje}</p>
-                        <button onclick="Office.context.ui.messageParent('close')">Entendido</button>
-                        <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"><\/script>
-                    </body></html>
-                `),
-                { height: 30, width: 25, displayInIframe: true },
-                (result) => {
-                    if (result.value) {
-                        result.value.addEventHandler(Office.EventType.DialogMessageReceived, () => {
-                            result.value.close();
-                        });
-                    }
-                }
-            );
-        } catch (e) {
-            console.error(mensaje);
-        }
-    } else {
-        console.log('✓ ' + mensaje);
-    }
-}
-
-async function marcarUnidad(event) {
+function notificarError(mensaje) {
     try {
+        Office.context.ui.displayDialogAsync(
+            'data:text/html,' + encodeURIComponent(`
+                <html><head><style>
+                    body{font-family:'Segoe UI',sans-serif;padding:18px;background:#FAFAF7;margin:0;}
+                    .icon{font-size:24px;color:#9D174D;}
+                    h2{font-size:13px;color:#2C2C2A;margin:6px 0;}
+                    p{font-size:11px;color:#5F5E5A;line-height:1.5;}
+                    button{background:#3730A3;color:white;border:none;padding:6px 14px;border-radius:3px;font-size:11px;cursor:pointer;margin-top:10px;}
+                </style></head>
+                <body>
+                    <div class="icon">⚠</div>
+                    <h2>MetraPro</h2>
+                    <p>${mensaje}</p>
+                    <button onclick="Office.context.ui.messageParent('close')">Entendido</button>
+                    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"><\/script>
+                </body></html>
+            `),
+            { height: 25, width: 22, displayInIframe: true },
+            (result) => {
+                if (result.value) {
+                    result.value.addEventHandler(Office.EventType.DialogMessageReceived, () => {
+                        result.value.close();
+                    });
+                }
+            }
+        );
+    } catch (e) {
+        console.error(mensaje);
+    }
+}
+
+async function aplicarNivel(numero, event) {
+    try {
+        const config = NIVELES[numero];
+        if (!config) {
+            notificarError('Nivel ' + numero + ' no definido.');
+            event.completed();
+            return;
+        }
+
         await Excel.run(async (context) => {
             const sheet = context.workbook.worksheets.getActiveWorksheet();
             const cell = context.workbook.getActiveCell();
@@ -114,175 +67,41 @@ async function marcarUnidad(event) {
             await context.sync();
             const r = cell.rowIndex + 1;
 
-            if (r < 18) {
-                notificar('La fila debe estar en la zona de partidas (fila 18 en adelante).', true);
+            if (r < 1) {
+                notificarError('Selecciona una fila válida primero.');
                 event.completed();
                 return;
             }
 
-            sheet.getRange(`B${r}`).values = [['U']];
+            const rango = sheet.getRange(`C${r}:D${r}`);
+            rango.format.font.color = config.color;
+            rango.format.font.size = config.size;
+            rango.format.font.bold = config.bold;
+            rango.format.font.italic = config.italic;
 
-            const rango = sheet.getRange(`B${r}:Q${r}`);
-            rango.format.fill.color = '#FFF2CC';
-            rango.format.font.color = '#7F6000';
-            rango.format.font.bold = true;
-            rango.format.font.size = 9;
-            rango.format.borders.getItem('EdgeBottom').style = 'Continuous';
-            rango.format.borders.getItem('EdgeBottom').weight = 'Hairline';
-
-            sheet.getRange(`B${r}`).format.font.color = '#FFFFFF';
-            sheet.getRange(`B${r}`).format.font.size = 6;
-
-            await context.sync();
-            await recalcularSumUnidad(sheet, context, r);
             await context.sync();
         });
     } catch (err) {
         console.error(err);
-        notificar('No se pudo marcar como Unidad: ' + err.message, true);
+        notificarError('No se pudo aplicar el nivel: ' + err.message);
     } finally {
         event.completed();
     }
 }
 
-async function marcarData(event) {
-    try {
-        await Excel.run(async (context) => {
-            const sheet = context.workbook.worksheets.getActiveWorksheet();
-            const cell = context.workbook.getActiveCell();
-            cell.load('rowIndex');
-            await context.sync();
-            const r = cell.rowIndex + 1;
+async function nivel1(event) { return aplicarNivel(1, event); }
+async function nivel2(event) { return aplicarNivel(2, event); }
+async function nivel3(event) { return aplicarNivel(3, event); }
+async function nivel4(event) { return aplicarNivel(4, event); }
+async function nivel5(event) { return aplicarNivel(5, event); }
+async function nivel6(event) { return aplicarNivel(6, event); }
 
-            if (r < 18) {
-                notificar('La fila debe estar en la zona de partidas (fila 18 en adelante).', true);
-                event.completed();
-                return;
-            }
-
-            const filaUnidad = await buscarUnidadArriba(sheet, context, r);
-            if (filaUnidad === null) {
-                notificar('No encontré una UNIDAD arriba de la fila ' + r + '. Marca primero la UNIDAD del bloque.', true);
-                event.completed();
-                return;
-            }
-
-            const unidadCell = sheet.getRange(`E${filaUnidad}`).load('values');
-            await context.sync();
-            const unidad = unidadCell.values[0][0];
-            const dest = getColDestino(unidad);
-
-            sheet.getRange(`B${r}`).values = [['D']];
-
-            const rango = sheet.getRange(`B${r}:Q${r}`);
-            rango.format.fill.color = '#FFFFFF';
-            rango.format.font.color = '#404040';
-            rango.format.font.bold = false;
-            rango.format.font.size = 9;
-            rango.format.borders.getItem('EdgeBottom').style = 'Continuous';
-            rango.format.borders.getItem('EdgeBottom').weight = 'Hairline';
-            rango.format.borders.getItem('EdgeBottom').color = '#E5E3DC';
-
-            sheet.getRange(`F${r}:J${r}`).format.fill.color = '#FFFDE7';
-
-            sheet.getRange(`B${r}`).format.font.color = '#FFFFFF';
-            sheet.getRange(`B${r}`).format.font.size = 6;
-
-            const formula = construirFormula(dest.formula, r);
-            sheet.getRange(`${dest.col}${r}`).formulas = [[formula]];
-
-            sheet.getRange(`P${r}`).formulas = [[`=K${r}+L${r}+M${r}+N${r}+O${r}`]];
-
-            await context.sync();
-            await recalcularSumUnidad(sheet, context, filaUnidad);
-            await context.sync();
-        });
-    } catch (err) {
-        console.error(err);
-        notificar('No se pudo marcar como Data: ' + err.message, true);
-    } finally {
-        event.completed();
-    }
-}
-
-async function agregarSustento(event) {
-    try {
-        await Excel.run(async (context) => {
-            const sheet = context.workbook.worksheets.getActiveWorksheet();
-            const cell = context.workbook.getActiveCell();
-            cell.load('rowIndex');
-            await context.sync();
-            const filaCursor = cell.rowIndex + 1;
-
-            if (filaCursor < 18) {
-                notificar('La fila debe estar en la zona de partidas (fila 18 en adelante).', true);
-                event.completed();
-                return;
-            }
-
-            const marcaActual = sheet.getRange(`B${filaCursor}`).load('values');
-            await context.sync();
-            const marca = (marcaActual.values[0][0] || '').toString().trim();
-
-            let filaUnidad = null;
-            if (marca === 'U') {
-                filaUnidad = filaCursor;
-            } else {
-                filaUnidad = await buscarUnidadArriba(sheet, context, filaCursor);
-                if (filaUnidad === null) {
-                    notificar('No encontré una UNIDAD. Coloca el cursor en una fila UNIDAD o DATA de un bloque que ya tenga UNIDAD asignada.', true);
-                    event.completed();
-                    return;
-                }
-            }
-
-            const filaNueva = filaCursor + 1;
-            sheet.getRange(`${filaNueva}:${filaNueva}`).insert('Down');
-            await context.sync();
-
-            const unidadCell = sheet.getRange(`E${filaUnidad}`).load('values');
-            await context.sync();
-            const unidad = unidadCell.values[0][0];
-            const dest = getColDestino(unidad);
-
-            sheet.getRange(`B${filaNueva}`).values = [['D']];
-
-            const rango = sheet.getRange(`B${filaNueva}:Q${filaNueva}`);
-            rango.format.fill.color = '#FFFFFF';
-            rango.format.font.color = '#404040';
-            rango.format.font.bold = false;
-            rango.format.font.size = 9;
-            rango.format.borders.getItem('EdgeBottom').style = 'Continuous';
-            rango.format.borders.getItem('EdgeBottom').weight = 'Hairline';
-            rango.format.borders.getItem('EdgeBottom').color = '#E5E3DC';
-
-            sheet.getRange(`F${filaNueva}:J${filaNueva}`).format.fill.color = '#FFFDE7';
-
-            sheet.getRange(`B${filaNueva}`).format.font.color = '#FFFFFF';
-            sheet.getRange(`B${filaNueva}`).format.font.size = 6;
-
-            const formula = construirFormula(dest.formula, filaNueva);
-            sheet.getRange(`${dest.col}${filaNueva}`).formulas = [[formula]];
-
-            sheet.getRange(`P${filaNueva}`).formulas = [[`=K${filaNueva}+L${filaNueva}+M${filaNueva}+N${filaNueva}+O${filaNueva}`]];
-
-            sheet.getRange(`F${filaNueva}`).select();
-
-            await context.sync();
-            await recalcularSumUnidad(sheet, context, filaUnidad);
-            await context.sync();
-        });
-    } catch (err) {
-        console.error(err);
-        notificar('No se pudo agregar sustento: ' + err.message, true);
-    } finally {
-        event.completed();
-    }
-}
-
-Office.actions.associate('marcarUnidad', marcarUnidad);
-Office.actions.associate('marcarData', marcarData);
-Office.actions.associate('agregarSustento', agregarSustento);
+Office.actions.associate('nivel1', nivel1);
+Office.actions.associate('nivel2', nivel2);
+Office.actions.associate('nivel3', nivel3);
+Office.actions.associate('nivel4', nivel4);
+Office.actions.associate('nivel5', nivel5);
+Office.actions.associate('nivel6', nivel6);
 </script>
 </body>
 </html>
