@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MetraPro · Importador de partidas</title>
+    <title>MetraPro · Importador</title>
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,7 +11,7 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background: #FAFAF7;
             color: #2C2C2A;
-            font-size: 13px;
+            font-size: 12px;
             line-height: 1.4;
             display: flex;
             flex-direction: column;
@@ -21,56 +21,54 @@
         .header {
             background: linear-gradient(135deg, #0078D7 0%, #00B7C3 100%);
             color: white;
-            padding: 14px 16px 12px;
+            padding: 12px 14px;
             flex-shrink: 0;
         }
         .header h1 {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             margin-bottom: 2px;
-            letter-spacing: -0.2px;
         }
         .header p {
-            font-size: 11px;
+            font-size: 10px;
             opacity: 0.9;
         }
         .header .badge {
             display: inline-block;
             background: rgba(255,255,255,0.2);
-            padding: 2px 8px;
-            border-radius: 10px;
+            padding: 1px 7px;
+            border-radius: 8px;
             font-size: 10px;
-            margin-top: 6px;
+            margin-top: 5px;
             font-weight: 500;
         }
         .seccion-titulo {
-            font-size: 10px;
+            font-size: 9px;
             color: #888780;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
-            padding: 10px 16px 6px;
+            letter-spacing: 0.5px;
+            padding: 8px 14px 4px;
             background: white;
         }
         .especialidades {
             background: white;
-            padding: 0 12px 10px;
+            padding: 0 10px 8px;
             border-bottom: 0.5px solid #E5E3DC;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 6px;
+            gap: 5px;
         }
         .esp {
-            padding: 8px 10px;
+            padding: 6px 8px;
             border: 1px solid #D3D1C7;
-            border-radius: 5px;
+            border-radius: 4px;
             text-align: center;
             font-size: 11px;
             font-weight: 500;
             color: #5F5E5A;
             background: #FAFAF7;
             cursor: pointer;
-            transition: all 0.15s;
         }
         .esp.activa {
             border: 1.5px solid #0078D7;
@@ -82,31 +80,30 @@
             color: #B4B2A9;
             background: #F5F4EE;
             cursor: not-allowed;
+            font-weight: 400;
         }
         .esp-tag {
             font-size: 8px;
             display: block;
-            margin-top: 1px;
             opacity: 0.7;
+            margin-top: 1px;
         }
         .controles {
             background: white;
-            padding: 10px 14px;
+            padding: 8px 12px;
             border-bottom: 0.5px solid #E5E3DC;
         }
         .search-wrap {
             position: relative;
-            margin-bottom: 8px;
         }
         .search-wrap input {
             width: 100%;
-            padding: 7px 10px 7px 28px;
+            padding: 6px 30px 6px 28px;
             border: 1px solid #D3D1C7;
             border-radius: 4px;
             font-family: inherit;
-            font-size: 12px;
+            font-size: 11px;
             background: white;
-            transition: border-color 0.15s;
         }
         .search-wrap input:focus {
             outline: none;
@@ -119,132 +116,147 @@
             left: 9px;
             top: 50%;
             transform: translateY(-50%);
-            width: 11px;
-            height: 11px;
+            width: 10px;
+            height: 10px;
             border: 1.5px solid #888780;
             border-radius: 50%;
         }
         .search-wrap::after {
             content: "";
             position: absolute;
-            left: 18px;
-            top: 19px;
-            width: 6px;
+            left: 17px;
+            top: 18px;
+            width: 5px;
             height: 1.5px;
             background: #888780;
             transform: rotate(45deg);
         }
-        .chips {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-        .chip {
-            padding: 3px 9px;
-            font-size: 10px;
-            border: 1px solid #D3D1C7;
-            border-radius: 12px;
-            background: white;
-            color: #5F5E5A;
+        .btn-clear {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #888780;
             cursor: pointer;
-            user-select: none;
-            transition: all 0.15s;
-            white-space: nowrap;
+            font-size: 13px;
+            display: none;
+            width: 18px;
+            height: 18px;
+            line-height: 18px;
+            border-radius: 50%;
         }
-        .chip:hover { background: #F5F4EE; }
-        .chip.activo {
-            background: #0078D7;
-            color: white;
-            border-color: #0078D7;
-        }
-        .lista {
-            flex: 1;
-            overflow-y: auto;
-            background: white;
-        }
-        .cat-header {
-            padding: 6px 14px;
+        .btn-clear:hover {
             background: #F1EFE8;
-            border-bottom: 0.5px solid #D3D1C7;
-            font-size: 10px;
-            font-weight: 700;
-            color: #5F5E5A;
-            position: sticky;
-            top: 0;
-            z-index: 5;
+            color: #2C2C2A;
+        }
+        .toolbar {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-        }
-        .cat-header .count {
-            font-weight: 400;
-            color: #888780;
+            margin-top: 6px;
             font-size: 10px;
+            color: #5F5E5A;
         }
-        .cat-header .toggle {
-            font-size: 10px;
+        .toolbar a {
             color: #0078D7;
             cursor: pointer;
             font-weight: 500;
         }
-        .cat-header .toggle:hover { text-decoration: underline; }
-        .partida {
-            padding: 7px 14px;
-            border-bottom: 0.5px solid #F1EFE8;
+        .toolbar a:hover { text-decoration: underline; }
+        .lista {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            padding: 4px 0;
+        }
+        .nodo {
             display: flex;
-            align-items: flex-start;
-            gap: 8px;
+            align-items: center;
+            padding: 3px 4px 3px 0;
             cursor: pointer;
             transition: background 0.1s;
+            font-family: 'Consolas', 'Courier New', monospace;
+            user-select: none;
         }
-        .partida:hover { background: #FAFAF7; }
-        .partida.selected { background: #FFF8E1; }
-        .partida input[type="checkbox"] {
-            margin: 2px 0 0 0;
+        .nodo:hover { background: #FAFAF7; }
+        .nodo.selected { background: #FFF8E1; }
+        .nodo.match { background: #E6F1FB; }
+        .nodo .toggle {
+            width: 18px;
+            text-align: center;
+            font-size: 9px;
+            color: #5F5E5A;
             flex-shrink: 0;
-            cursor: pointer;
-            width: 14px;
-            height: 14px;
+        }
+        .nodo .toggle.empty { visibility: hidden; }
+        .nodo input[type="checkbox"] {
+            margin: 0 6px 0 0;
+            flex-shrink: 0;
+            width: 13px;
+            height: 13px;
             accent-color: #0078D7;
+            cursor: pointer;
         }
-        .partida-info {
-            flex: 1;
-            min-width: 0;
+        .nodo input[type="checkbox"].partial {
+            opacity: 0.6;
         }
-        .partida-desc {
+        .nodo .codigo {
             font-size: 11px;
-            font-weight: 500;
-            color: #2C2C2A;
-            line-height: 1.35;
-            margin-bottom: 2px;
+            color: #5F5E5A;
+            margin-right: 8px;
+            flex-shrink: 0;
+            min-width: 70px;
         }
-        .partida-meta {
-            font-size: 10px;
-            color: #888780;
-            display: flex;
-            gap: 6px;
-            align-items: center;
+        .nodo .descripcion {
+            font-size: 11px;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .nivel-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 3px;
+        .nodo[data-nivel="1"] .codigo,
+        .nodo[data-nivel="1"] .descripcion {
+            color: #E81123;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .nodo[data-nivel="2"] .codigo,
+        .nodo[data-nivel="2"] .descripcion {
+            color: #16C60C;
+            font-weight: 700;
+        }
+        .nodo[data-nivel="3"] .codigo,
+        .nodo[data-nivel="3"] .descripcion {
+            color: #0078D7;
+            font-weight: 700;
+        }
+        .nodo[data-nivel="4"] .codigo,
+        .nodo[data-nivel="4"] .descripcion {
+            color: #FF8C00;
+            font-weight: 600;
+        }
+        .nodo[data-nivel="5"] .codigo,
+        .nodo[data-nivel="5"] .descripcion {
+            color: #00B7C3;
+            font-weight: 600;
+        }
+        .nodo .nivel-badge {
+            font-size: 8px;
+            padding: 1px 4px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: white;
+            margin-left: 6px;
+            flex-shrink: 0;
+        }
+        .nodo .unidad-badge {
             font-size: 9px;
             padding: 1px 5px;
-            background: #FF8C00;
-            color: white;
-            border-radius: 8px;
+            border-radius: 2px;
             font-weight: 600;
-        }
-        .unidad-badge {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-weight: 600;
+            margin-left: 6px;
             flex-shrink: 0;
-            min-width: 30px;
-            text-align: center;
-            margin-top: 0;
         }
         .u-m3 { background: #FAEEDA; color: #854F0B; }
         .u-m2 { background: #E1F5EE; color: #085041; }
@@ -253,7 +265,7 @@
         .u-und { background: #EEEDFE; color: #3C3489; }
         .u-glb { background: #F1EFE8; color: #5F5E5A; }
         .footer {
-            padding: 11px 14px;
+            padding: 10px 12px;
             background: #F1EFE8;
             border-top: 0.5px solid #D3D1C7;
             display: flex;
@@ -270,16 +282,15 @@
             font-size: 13px;
         }
         .btn-primary {
-            padding: 8px 16px;
+            padding: 7px 14px;
             background: #0078D7;
             color: white;
             border: none;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             cursor: pointer;
             font-family: inherit;
-            transition: background 0.15s;
         }
         .btn-primary:hover { background: #0c5ca8; }
         .btn-primary:disabled {
@@ -290,100 +301,16 @@
             padding: 30px 20px;
             text-align: center;
             color: #888780;
-            font-size: 12px;
+            font-size: 11px;
         }
         .error {
-            padding: 14px;
-            margin: 10px 14px;
+            padding: 12px;
+            margin: 10px;
             background: #FCE8E6;
             border: 1px solid #F5C6CB;
             color: #B71C1C;
             border-radius: 4px;
             font-size: 11px;
-        }
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-        .modal-overlay.visible { display: flex; }
-        .modal {
-            background: white;
-            border-radius: 8px;
-            padding: 18px;
-            max-width: 290px;
-            width: 90%;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-        }
-        .modal h3 {
-            font-size: 13px;
-            font-weight: 600;
-            color: #2C2C2A;
-            margin-bottom: 8px;
-        }
-        .modal p {
-            font-size: 11px;
-            color: #5F5E5A;
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        .modal-radio {
-            display: flex;
-            align-items: flex-start;
-            gap: 7px;
-            padding: 8px 10px;
-            border: 1px solid #D3D1C7;
-            border-radius: 4px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: all 0.15s;
-        }
-        .modal-radio:hover { background: #FAFAF7; }
-        .modal-radio.selected {
-            border-color: #0078D7;
-            background: #E6F1FB;
-        }
-        .modal-radio input { margin-top: 1px; flex-shrink: 0; accent-color: #0078D7; }
-        .modal-radio-label {
-            flex: 1;
-            font-size: 11px;
-            color: #2C2C2A;
-        }
-        .modal-radio-label strong { font-weight: 600; }
-        .modal-radio-label small {
-            display: block;
-            color: #888780;
-            font-size: 10px;
-            margin-top: 1px;
-        }
-        .modal-buttons {
-            display: flex;
-            gap: 6px;
-            justify-content: flex-end;
-            margin-top: 12px;
-        }
-        .modal button {
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 500;
-            cursor: pointer;
-            border: 1px solid;
-            font-family: inherit;
-        }
-        .modal .btn-cancel {
-            background: white;
-            color: #5F5E5A;
-            border-color: #D3D1C7;
-        }
-        .modal .btn-confirm {
-            background: #0078D7;
-            color: white;
-            border-color: #0078D7;
         }
         .toast {
             position: fixed;
@@ -392,14 +319,15 @@
             transform: translateX(-50%);
             background: #1B5E20;
             color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 7px 14px;
+            border-radius: 16px;
             font-size: 11px;
             font-weight: 500;
             z-index: 50;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
+            white-space: nowrap;
         }
         .toast.visible { opacity: 1; }
         .toast.error { background: #B71C1C; }
@@ -409,23 +337,27 @@
 
     <div class="header">
         <h1>Importar partidas</h1>
-        <p>Banco oficial · Norma RD 073-2010 VIVIENDA</p>
+        <p>Banco oficial · Norma RD 073-2010</p>
         <span class="badge" id="versionBadge">cargando...</span>
     </div>
 
     <div class="seccion-titulo">Especialidad</div>
     <div class="especialidades">
-        <div class="esp activa" data-esp="estructuras">Estructuras</div>
-        <div class="esp deshabilitada" data-esp="arquitectura">Arquitectura<span class="esp-tag">próximamente</span></div>
-        <div class="esp deshabilitada" data-esp="sanitarias">I. Sanitarias<span class="esp-tag">próximamente</span></div>
-        <div class="esp deshabilitada" data-esp="electricas">I. Eléctricas<span class="esp-tag">próximamente</span></div>
+        <div class="esp activa">Estructuras</div>
+        <div class="esp deshabilitada">Arquitectura<span class="esp-tag">próximamente</span></div>
+        <div class="esp deshabilitada">I. Sanitarias<span class="esp-tag">próximamente</span></div>
+        <div class="esp deshabilitada">I. Eléctricas<span class="esp-tag">próximamente</span></div>
     </div>
 
     <div class="controles" id="controles" style="display: none;">
         <div class="search-wrap">
-            <input type="text" id="busqueda" placeholder="Buscar... (ej: zapata, encofrado, fc=210)" />
+            <input type="text" id="busqueda" placeholder="Buscar... (zapata, encofrado, fc=210)" />
+            <button class="btn-clear" id="btnClear" title="Limpiar">×</button>
         </div>
-        <div class="chips" id="chips"></div>
+        <div class="toolbar">
+            <span><span id="totalSelec">0</span> seleccionados</span>
+            <span><a id="lnkExpandir">Expandir todo</a> · <a id="lnkColapsar">Colapsar todo</a></span>
+        </div>
     </div>
 
     <div class="lista" id="lista">
@@ -434,42 +366,16 @@
 
     <div class="footer">
         <div class="footer-info">
-            <strong id="seleccionadas">0</strong> seleccionadas
+            <strong id="seleccionadas">0</strong> elementos a importar
         </div>
         <button class="btn-primary" id="btnImportar" disabled>Importar</button>
-    </div>
-
-    <div class="modal-overlay" id="modal">
-        <div class="modal">
-            <h3>Confirmar importación</h3>
-            <p id="modalMsg">Se insertarán <strong id="modalCount">0</strong> partidas a partir de la fila <strong id="modalRow">?</strong>.</p>
-            <div style="font-size: 11px; color: #5F5E5A; margin-bottom: 6px; font-weight: 500;">¿Incluir títulos padres?</div>
-            <label class="modal-radio selected" id="optSi">
-                <input type="radio" name="padres" value="si" checked />
-                <div class="modal-radio-label">
-                    <strong>Sí, agregar padres</strong>
-                    <small>Incluye OE.2 ESTRUCTURAS y categoría correspondiente arriba de cada partida</small>
-                </div>
-            </label>
-            <label class="modal-radio" id="optNo">
-                <input type="radio" name="padres" value="no" />
-                <div class="modal-radio-label">
-                    <strong>No, solo las partidas</strong>
-                    <small>Importar únicamente las partidas seleccionadas sin agregar títulos</small>
-                </div>
-            </label>
-            <div class="modal-buttons">
-                <button class="btn-cancel" id="btnCancelar">Cancelar</button>
-                <button class="btn-confirm" id="btnConfirmar">Insertar</button>
-            </div>
-        </div>
     </div>
 
     <div class="toast" id="toast"></div>
 
     <script>
         const JSON_URL = 'https://marcelarojasinfantes-spec.github.io/metrapro-zapatas/partidas-estructuras.json';
-        
+
         const NIVELES_FORMATO = {
             1: { color: '#E81123', size: 13, bold: true,  italic: false },
             2: { color: '#16C60C', size: 12, bold: true,  italic: false },
@@ -481,32 +387,45 @@
             8: { color: '#737373', size: 10, bold: false, italic: false },
             9: { color: '#374151', size: 9,  bold: false, italic: true  }
         };
-        
+
         let baseDatos = null;
-        let filtroCategoria = 'todas';
-        let filtroBusqueda = '';
+        let arbolNodos = [];
+        let nodoIndex = {};
         let seleccionadas = new Set();
-        let filaCursor = null;
+        let expandidos = new Set();
+        let filtroBusqueda = '';
 
         Office.onReady(() => {
             cargarBaseDatos();
             
             document.getElementById('busqueda').addEventListener('input', (e) => {
                 filtroBusqueda = e.target.value.toLowerCase().trim();
+                document.getElementById('btnClear').style.display = filtroBusqueda ? 'block' : 'none';
+                if (filtroBusqueda) {
+                    expandirCoincidentes();
+                }
                 renderLista();
             });
-            
-            document.getElementById('btnImportar').addEventListener('click', preImportar);
-            document.getElementById('btnCancelar').addEventListener('click', cerrarModal);
-            document.getElementById('btnConfirmar').addEventListener('click', confirmarImportar);
-            
-            document.querySelectorAll('.modal-radio').forEach(r => {
-                r.addEventListener('click', () => {
-                    document.querySelectorAll('.modal-radio').forEach(x => x.classList.remove('selected'));
-                    r.classList.add('selected');
-                    r.querySelector('input').checked = true;
-                });
+
+            document.getElementById('btnClear').addEventListener('click', () => {
+                document.getElementById('busqueda').value = '';
+                filtroBusqueda = '';
+                document.getElementById('btnClear').style.display = 'none';
+                renderLista();
             });
+
+            document.getElementById('lnkExpandir').addEventListener('click', () => {
+                arbolNodos.forEach(n => { if (n.hijos.length > 0) expandidos.add(n.codigo); });
+                renderLista();
+            });
+
+            document.getElementById('lnkColapsar').addEventListener('click', () => {
+                expandidos.clear();
+                arbolNodos.filter(n => n.nivel === 1).forEach(n => expandidos.add(n.codigo));
+                renderLista();
+            });
+
+            document.getElementById('btnImportar').addEventListener('click', importar);
         });
 
         async function cargarBaseDatos() {
@@ -515,47 +434,76 @@
                 if (!res.ok) throw new Error('No se pudo descargar el JSON');
                 baseDatos = await res.json();
                 
-                document.getElementById('versionBadge').textContent = `v${baseDatos.version} · ${baseDatos.partidas.length} partidas`;
+                document.getElementById('versionBadge').textContent = `v${baseDatos.version} · ${baseDatos.elementos.length} elementos`;
                 document.getElementById('controles').style.display = 'block';
                 
-                renderChips();
+                construirArbol();
+                
+                arbolNodos.filter(n => n.nivel === 1).forEach(n => expandidos.add(n.codigo));
+                
                 renderLista();
             } catch (err) {
-                document.getElementById('lista').innerHTML = `
-                    <div class="error">
-                        <strong>Error al cargar el banco:</strong><br>
-                        ${err.message}
-                    </div>
-                `;
+                document.getElementById('lista').innerHTML = `<div class="error">Error: ${err.message}</div>`;
             }
         }
 
-        function renderChips() {
-            const cont = document.getElementById('chips');
-            cont.innerHTML = '';
-            
-            const todas = document.createElement('span');
-            todas.className = 'chip activo';
-            todas.textContent = 'Todas';
-            todas.onclick = () => seleccionarChip('todas', todas);
-            cont.appendChild(todas);
-            
-            baseDatos.categorias.forEach(cat => {
-                const count = baseDatos.partidas.filter(p => p.categoria === cat.codigo).length;
-                const chip = document.createElement('span');
-                chip.className = 'chip';
-                chip.textContent = `${cat.codigo.replace('OE.', '')} (${count})`;
-                chip.title = cat.nombre;
-                chip.onclick = () => seleccionarChip(cat.codigo, chip);
-                cont.appendChild(chip);
+        function calcularNivel(codigo) {
+            const partes = codigo.replace(/^OE\./, '').split('.').filter(p => p.trim() !== '');
+            return partes.length;
+        }
+
+        function construirArbol() {
+            arbolNodos = [];
+            nodoIndex = {};
+
+            baseDatos.elementos.forEach(e => {
+                const nivel = calcularNivel(e.codigo);
+                const nodo = {
+                    codigo: e.codigo,
+                    descripcion: e.descripcion,
+                    unidad: e.unidad,
+                    tipo_calculo: e.tipo_calculo,
+                    nivel: nivel,
+                    hijos: [],
+                    padre: null
+                };
+                arbolNodos.push(nodo);
+                nodoIndex[e.codigo] = nodo;
+            });
+
+            arbolNodos.forEach(nodo => {
+                const partes = nodo.codigo.split('.');
+                if (partes.length > 1) {
+                    const codPadre = partes.slice(0, -1).join('.');
+                    if (nodoIndex[codPadre]) {
+                        nodo.padre = codPadre;
+                        nodoIndex[codPadre].hijos.push(nodo.codigo);
+                    }
+                }
             });
         }
 
-        function seleccionarChip(cat, elem) {
-            filtroCategoria = cat;
-            document.querySelectorAll('.chip').forEach(c => c.classList.remove('activo'));
-            elem.classList.add('activo');
-            renderLista();
+        function expandirCoincidentes() {
+            arbolNodos.forEach(nodo => {
+                if (coincide(nodo)) {
+                    let cur = nodo.padre;
+                    while (cur) {
+                        expandidos.add(cur);
+                        cur = nodoIndex[cur] ? nodoIndex[cur].padre : null;
+                    }
+                }
+            });
+        }
+
+        function coincide(nodo) {
+            if (!filtroBusqueda) return true;
+            const haystack = (nodo.descripcion + ' ' + nodo.codigo).toLowerCase();
+            return haystack.includes(filtroBusqueda);
+        }
+
+        function nodoOSusHijosCoinciden(nodo) {
+            if (coincide(nodo)) return true;
+            return nodo.hijos.some(c => nodoOSusHijosCoinciden(nodoIndex[c]));
         }
 
         function getUnidadClass(und) {
@@ -567,235 +515,224 @@
             return 'u-glb';
         }
 
-        function calcularNivel(codigo) {
-            const codigoLimpio = codigo.replace(/^OE\./, '');
-            const partes = codigoLimpio.split('.').filter(p => p.trim() !== '');
-            return Math.min(partes.length, 9);
+        function getEstadoCheck(nodo) {
+            if (nodo.hijos.length === 0) {
+                return seleccionadas.has(nodo.codigo) ? 'todos' : 'ninguno';
+            }
+            
+            let conMarca = 0;
+            let total = 0;
+            
+            const recorrer = (c) => {
+                const hijo = nodoIndex[c];
+                if (hijo.hijos.length === 0) {
+                    total++;
+                    if (seleccionadas.has(hijo.codigo)) conMarca++;
+                } else {
+                    hijo.hijos.forEach(recorrer);
+                }
+            };
+            nodo.hijos.forEach(recorrer);
+            
+            if (conMarca === 0) return 'ninguno';
+            if (conMarca === total) return 'todos';
+            return 'parcial';
+        }
+
+        function toggleSeleccion(nodo) {
+            const estado = getEstadoCheck(nodo);
+            const seleccionar = (estado !== 'todos');
+            
+            const recorrer = (cod) => {
+                const n = nodoIndex[cod];
+                if (n.hijos.length === 0) {
+                    if (seleccionar) seleccionadas.add(cod);
+                    else seleccionadas.delete(cod);
+                } else {
+                    n.hijos.forEach(recorrer);
+                }
+            };
+            
+            if (nodo.hijos.length === 0) {
+                if (seleccionar) seleccionadas.add(nodo.codigo);
+                else seleccionadas.delete(nodo.codigo);
+            } else {
+                nodo.hijos.forEach(recorrer);
+            }
+            
+            renderLista();
+        }
+
+        function toggleExpand(codigo) {
+            if (expandidos.has(codigo)) expandidos.delete(codigo);
+            else expandidos.add(codigo);
+            renderLista();
         }
 
         function renderLista() {
             const cont = document.getElementById('lista');
             cont.innerHTML = '';
             
-            let filtradas = baseDatos.partidas;
+            const raices = arbolNodos.filter(n => n.padre === null);
             
-            if (filtroCategoria !== 'todas') {
-                filtradas = filtradas.filter(p => p.categoria === filtroCategoria);
-            }
-            
-            if (filtroBusqueda) {
-                filtradas = filtradas.filter(p => {
-                    const haystack = (p.descripcion + ' ' + p.codigo + ' ' + (p.palabras_clave || '') + ' ' + p.subcategoria).toLowerCase();
-                    return haystack.includes(filtroBusqueda);
-                });
-            }
-            
-            if (filtradas.length === 0) {
-                cont.innerHTML = '<div class="loading">No se encontraron partidas con ese filtro</div>';
-                return;
-            }
-            
-            const grupos = {};
-            filtradas.forEach(p => {
-                const key = p.subcategoria;
-                if (!grupos[key]) grupos[key] = [];
-                grupos[key].push(p);
-            });
-            
-            Object.keys(grupos).forEach(subcat => {
-                const partidas = grupos[subcat];
-                const cat = baseDatos.categorias.find(c => c.codigo === partidas[0].categoria);
+            const renderNodo = (nodo, profundidad) => {
+                if (filtroBusqueda && !nodoOSusHijosCoinciden(nodo)) return;
                 
-                const header = document.createElement('div');
-                header.className = 'cat-header';
-                header.innerHTML = `
-                    <span>${cat.codigo} · ${subcat}</span>
-                    <span>
-                        <span class="count">${partidas.length}</span>
-                        <span class="toggle" data-subcat="${subcat}">marcar todos</span>
-                    </span>
-                `;
-                cont.appendChild(header);
+                const div = document.createElement('div');
+                div.className = 'nodo';
+                if (filtroBusqueda && coincide(nodo)) div.classList.add('match');
+                div.dataset.nivel = nodo.nivel;
                 
-                header.querySelector('.toggle').addEventListener('click', () => {
-                    const todasMarcadas = partidas.every(p => seleccionadas.has(p.codigo));
-                    partidas.forEach(p => {
-                        if (todasMarcadas) seleccionadas.delete(p.codigo);
-                        else seleccionadas.add(p.codigo);
+                const indent = document.createElement('div');
+                indent.style.width = (profundidad * 12) + 'px';
+                indent.style.flexShrink = '0';
+                div.appendChild(indent);
+                
+                const toggle = document.createElement('div');
+                toggle.className = 'toggle' + (nodo.hijos.length === 0 ? ' empty' : '');
+                toggle.textContent = nodo.hijos.length === 0 ? '' : (expandidos.has(nodo.codigo) ? '▾' : '▸');
+                if (nodo.hijos.length > 0) {
+                    toggle.onclick = (e) => {
+                        e.stopPropagation();
+                        toggleExpand(nodo.codigo);
+                    };
+                }
+                div.appendChild(toggle);
+                
+                const cb = document.createElement('input');
+                cb.type = 'checkbox';
+                const estado = getEstadoCheck(nodo);
+                cb.checked = (estado === 'todos');
+                cb.indeterminate = (estado === 'parcial');
+                if (estado === 'parcial') cb.classList.add('partial');
+                cb.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleSeleccion(nodo);
+                };
+                div.appendChild(cb);
+                
+                const cod = document.createElement('div');
+                cod.className = 'codigo';
+                cod.textContent = nodo.codigo.replace(/^OE\./, '');
+                div.appendChild(cod);
+                
+                const desc = document.createElement('div');
+                desc.className = 'descripcion';
+                desc.textContent = nodo.descripcion;
+                div.appendChild(desc);
+                
+                if (nodo.unidad) {
+                    const u = document.createElement('span');
+                    u.className = 'unidad-badge ' + getUnidadClass(nodo.unidad);
+                    u.textContent = nodo.unidad;
+                    div.appendChild(u);
+                }
+                
+                const formato = NIVELES_FORMATO[Math.min(nodo.nivel, 9)];
+                const nb = document.createElement('span');
+                nb.className = 'nivel-badge';
+                nb.style.background = formato.color;
+                nb.textContent = `N${Math.min(nodo.nivel, 9)}`;
+                div.appendChild(nb);
+                
+                div.onclick = () => toggleSeleccion(nodo);
+                
+                cont.appendChild(div);
+                
+                if (expandidos.has(nodo.codigo) || filtroBusqueda) {
+                    nodo.hijos.forEach(c => {
+                        renderNodo(nodoIndex[c], profundidad + 1);
                     });
-                    renderLista();
-                });
-                
-                partidas.forEach(p => {
-                    const nivel = calcularNivel(p.codigo);
-                    const formato = NIVELES_FORMATO[nivel];
-                    const row = document.createElement('div');
-                    row.className = 'partida' + (seleccionadas.has(p.codigo) ? ' selected' : '');
-                    row.innerHTML = `
-                        <input type="checkbox" ${seleccionadas.has(p.codigo) ? 'checked' : ''} />
-                        <div class="partida-info">
-                            <div class="partida-desc">${p.descripcion}</div>
-                            <div class="partida-meta">
-                                <span>${p.codigo.replace('OE.', '')}</span>
-                                <span class="nivel-pill" style="background: ${formato.color};">N${nivel}</span>
-                            </div>
-                        </div>
-                        <span class="unidad-badge ${getUnidadClass(p.unidad)}">${p.unidad}</span>
-                    `;
-                    
-                    const checkbox = row.querySelector('input');
-                    
-                    row.addEventListener('click', (e) => {
-                        if (e.target.tagName !== 'INPUT') {
-                            checkbox.checked = !checkbox.checked;
-                        }
-                        if (checkbox.checked) {
-                            seleccionadas.add(p.codigo);
-                            row.classList.add('selected');
-                        } else {
-                            seleccionadas.delete(p.codigo);
-                            row.classList.remove('selected');
-                        }
-                        actualizarContadores();
-                    });
-                    
-                    cont.appendChild(row);
-                });
-            });
+                }
+            };
             
-            actualizarContadores();
+            raices.forEach(r => renderNodo(r, 0));
+            
+            actualizarContador();
         }
 
-        function actualizarContadores() {
-            document.getElementById('seleccionadas').textContent = seleccionadas.size;
+        function actualizarContador() {
+            const set = new Set(seleccionadas);
+            seleccionadas.forEach(cod => {
+                let cur = nodoIndex[cod] ? nodoIndex[cod].padre : null;
+                while (cur) {
+                    set.add(cur);
+                    cur = nodoIndex[cur] ? nodoIndex[cur].padre : null;
+                }
+            });
+            
+            document.getElementById('seleccionadas').textContent = set.size;
+            document.getElementById('totalSelec').textContent = seleccionadas.size;
             document.getElementById('btnImportar').disabled = seleccionadas.size === 0;
         }
 
-        function cerrarModal() {
-            document.getElementById('modal').classList.remove('visible');
-        }
-
-        async function preImportar() {
-            try {
-                await Excel.run(async (context) => {
-                    const sel = context.workbook.getActiveCell();
-                    sel.load('rowIndex');
-                    await context.sync();
-                    filaCursor = sel.rowIndex + 1;
-                });
-                
-                document.getElementById('modalCount').textContent = seleccionadas.size;
-                document.getElementById('modalRow').textContent = filaCursor;
-                document.getElementById('modal').classList.add('visible');
-            } catch (err) {
-                showToast('Error al detectar la celda activa', true);
-            }
-        }
-
-        function aplicarFormatoNivel(sheet, fila, nivel) {
-            const formato = NIVELES_FORMATO[nivel];
-            const rango = sheet.getRange(`C${fila}:D${fila}`);
-            rango.format.font.color = formato.color;
-            rango.format.font.size = formato.size;
-            rango.format.font.bold = formato.bold;
-            rango.format.font.italic = formato.italic;
-            
-            sheet.getRange(`B${fila}`).values = [[`N${nivel}`]];
-            sheet.getRange(`B${fila}`).format.font.color = '#FFFFFF';
-            sheet.getRange(`B${fila}`).format.font.size = 6;
-        }
-
-        function calcularPadres(codigoPartida) {
-            const codigoSinOE = codigoPartida.replace(/^OE\./, '');
-            const partes = codigoSinOE.split('.').filter(p => p.trim() !== '');
-            const padres = [];
-            for (let i = 1; i < partes.length; i++) {
-                padres.push(partes.slice(0, i).join('.'));
-            }
-            return padres;
-        }
-
-        function obtenerDescripcionPadre(codigoPadre, baseDatos) {
-            const codigoOE = 'OE.' + codigoPadre;
-            
-            const cat = baseDatos.categorias.find(c => c.codigo === codigoOE);
-            if (cat) return cat.nombre.toUpperCase();
-            
-            const partes = codigoPadre.split('.');
-            
-            if (partes.length === 1) {
-                if (codigoPadre === '2') return 'ESTRUCTURAS';
-                return 'ESPECIALIDAD ' + codigoPadre;
-            }
-            
-            const partidaConSubcat = baseDatos.partidas.find(p => {
-                const codSinOE = p.codigo.replace(/^OE\./, '');
-                return codSinOE.startsWith(codigoPadre + '.');
-            });
-            
-            if (partidaConSubcat && partes.length === 3) {
-                return partidaConSubcat.subcategoria.toUpperCase();
-            }
-            
-            return '';
-        }
-
-        async function confirmarImportar() {
-            const incluirPadres = document.querySelector('input[name="padres"]:checked').value === 'si';
-            cerrarModal();
-            
+        async function importar() {
             const btn = document.getElementById('btnImportar');
             btn.disabled = true;
             btn.textContent = 'Insertando...';
             
             try {
-                const partidasSelec = baseDatos.partidas
-                    .filter(p => seleccionadas.has(p.codigo))
-                    .sort((a, b) => a.codigo.localeCompare(b.codigo));
-                
-                const filasAInsertar = [];
-                const padresAgregados = new Set();
-                
-                partidasSelec.forEach(p => {
-                    if (incluirPadres) {
-                        const padres = calcularPadres(p.codigo);
-                        padres.forEach(codPadre => {
-                            if (!padresAgregados.has(codPadre)) {
-                                padresAgregados.add(codPadre);
-                                const descPadre = obtenerDescripcionPadre(codPadre, baseDatos);
-                                const nivelPadre = codPadre.split('.').length;
-                                filasAInsertar.push({
-                                    codigo: codPadre,
-                                    descripcion: descPadre,
-                                    unidad: '',
-                                    nivel: nivelPadre,
-                                    esPadre: true
-                                });
-                            }
-                        });
+                const setCompleto = new Set(seleccionadas);
+                seleccionadas.forEach(cod => {
+                    let cur = nodoIndex[cod] ? nodoIndex[cod].padre : null;
+                    while (cur) {
+                        setCompleto.add(cur);
+                        cur = nodoIndex[cur] ? nodoIndex[cur].padre : null;
                     }
-                    
-                    const codigoSinOE = p.codigo.replace(/^OE\./, '');
-                    filasAInsertar.push({
-                        codigo: codigoSinOE,
-                        descripcion: p.descripcion,
-                        unidad: p.unidad,
-                        nivel: calcularNivel(p.codigo),
-                        esPadre: false
-                    });
                 });
+                
+                const codigos = Array.from(setCompleto).sort((a, b) => {
+                    const partesA = a.replace(/^OE\./, '').split('.').map(p => parseInt(p) || 0);
+                    const partesB = b.replace(/^OE\./, '').split('.').map(p => parseInt(p) || 0);
+                    for (let i = 0; i < Math.max(partesA.length, partesB.length); i++) {
+                        const va = partesA[i] || 0;
+                        const vb = partesB[i] || 0;
+                        if (va !== vb) return va - vb;
+                    }
+                    return 0;
+                });
+                
+                let filaCursor = null;
                 
                 await Excel.run(async (context) => {
                     const sheet = context.workbook.worksheets.getActiveWorksheet();
+                    const sel = context.workbook.getActiveCell();
+                    sel.load('rowIndex');
+                    await context.sync();
+                    filaCursor = sel.rowIndex + 1;
+                    
                     let r = filaCursor;
                     
-                    for (const fila of filasAInsertar) {
-                        sheet.getRange(`C${r}`).values = [[fila.codigo]];
-                        sheet.getRange(`D${r}`).values = [[fila.descripcion]];
-                        if (fila.unidad) {
-                            sheet.getRange(`E${r}`).values = [[fila.unidad]];
+                    for (const cod of codigos) {
+                        const nodo = nodoIndex[cod];
+                        if (!nodo) continue;
+                        
+                        const nivel = Math.min(nodo.nivel, 9);
+                        const formato = NIVELES_FORMATO[nivel];
+                        const codSinOE = cod.replace(/^OE\./, '');
+                        
+                        sheet.getRange(`B${r}`).values = [[`N${nivel}`]];
+                        sheet.getRange(`C${r}`).values = [[codSinOE]];
+                        sheet.getRange(`D${r}`).values = [[nodo.descripcion]];
+                        if (nodo.unidad) {
+                            sheet.getRange(`E${r}`).values = [[nodo.unidad]];
                         }
-                        aplicarFormatoNivel(sheet, r, fila.nivel);
+                        
+                        const rangoCD = sheet.getRange(`C${r}:D${r}`);
+                        rangoCD.format.font.color = formato.color;
+                        rangoCD.format.font.size = formato.size;
+                        rangoCD.format.font.bold = formato.bold;
+                        rangoCD.format.font.italic = formato.italic;
+                        
+                        sheet.getRange(`C${r}`).format.horizontalAlignment = 'Left';
+                        sheet.getRange(`D${r}`).format.horizontalAlignment = 'Left';
+                        if (nodo.unidad) {
+                            sheet.getRange(`E${r}`).format.horizontalAlignment = 'Center';
+                        }
+                        
+                        sheet.getRange(`B${r}`).format.font.color = '#FFFFFF';
+                        sheet.getRange(`B${r}`).format.font.size = 6;
+                        
                         r++;
                     }
                     
@@ -803,7 +740,7 @@
                     await context.sync();
                 });
                 
-                showToast(`✓ ${filasAInsertar.length} filas insertadas (${partidasSelec.length} partidas)`);
+                showToast(`✓ ${codigos.length} elementos insertados desde fila ${filaCursor}`);
                 
                 seleccionadas.clear();
                 renderLista();
@@ -814,15 +751,15 @@
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Importar';
-                actualizarContadores();
+                actualizarContador();
             }
         }
 
         function showToast(msg, esError) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.className = 'toast' + (esError ? ' error visible' : ' visible');
-            setTimeout(() => { toast.classList.remove('visible'); }, 3500);
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast' + (esError ? ' error visible' : ' visible');
+            setTimeout(() => { t.classList.remove('visible'); }, 3500);
         }
     </script>
 </body>
