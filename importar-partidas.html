@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetraPro · Importador de partidas</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #FAFAF7;
+            color: #2C2C2A;
+            font-size: 13px;
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #0078D7 0%, #00B7C3 100%);
+            color: white;
+            padding: 14px 16px 12px;
+            flex-shrink: 0;
+        }
+        .header h1 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+            letter-spacing: -0.2px;
+        }
+        .header p {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        .header .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+        .seccion-titulo {
+            font-size: 10px;
+            color: #888780;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 10px 16px 6px;
+            background: white;
+        }
+        .especialidades {
+            background: white;
+            padding: 0 12px 10px;
+            border-bottom: 0.5px solid #E5E3DC;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .esp {
+            padding: 8px 10px;
+            border: 1px solid #D3D1C7;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 500;
+            color: #5F5E5A;
+            background: #FAFAF7;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .esp.activa {
+            border: 1.5px solid #0078D7;
+            background: #E6F1FB;
+            color: #0C447C;
+            font-weight: 600;
+        }
+        .esp.deshabilitada {
+            color: #B4B2A9;
+            background: #F5F4EE;
+            cursor: not-allowed;
+        }
+        .esp-tag {
+            font-size: 8px;
+            display: block;
+            margin-top: 1px;
+            opacity: 0.7;
+        }
+        .controles {
+            background: white;
+            padding: 10px 14px;
+            border-bottom: 0.5px solid #E5E3DC;
+        }
+        .search-wrap {
+            position: relative;
+            margin-bottom: 8px;
+        }
+        .search-wrap input {
+            width: 100%;
+            padding: 7px 10px 7px 28px;
+            border: 1px solid #D3D1C7;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px;
+            background: white;
+            transition: border-color 0.15s;
+        }
+        .search-wrap input:focus {
+            outline: none;
+            border-color: #0078D7;
+            box-shadow: 0 0 0 2px rgba(0, 120, 215, 0.1);
+        }
+        .search-wrap::before {
+            content: "";
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 11px;
+            height: 11px;
+            border: 1.5px solid #888780;
+            border-radius: 50%;
+        }
+        .search-wrap::after {
+            content: "";
+            position: absolute;
+            left: 18px;
+            top: 19px;
+            width: 6px;
+            height: 1.5px;
+            background: #888780;
+            transform: rotate(45deg);
+        }
+        .chips {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+        .chip {
+            padding: 3px 9px;
+            font-size: 10px;
+            border: 1px solid #D3D1C7;
+            border-radius: 12px;
+            background: white;
+            color: #5F5E5A;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+        .chip:hover { background: #F5F4EE; }
+        .chip.activo {
+            background: #0078D7;
+            color: white;
+            border-color: #0078D7;
+        }
+        .lista {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+        }
+        .cat-header {
+            padding: 6px 14px;
+            background: #F1EFE8;
+            border-bottom: 0.5px solid #D3D1C7;
+            font-size: 10px;
+            font-weight: 700;
+            color: #5F5E5A;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .cat-header .count {
+            font-weight: 400;
+            color: #888780;
+            font-size: 10px;
+        }
+        .cat-header .toggle {
+            font-size: 10px;
+            color: #0078D7;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .cat-header .toggle:hover { text-decoration: underline; }
+        .partida {
+            padding: 7px 14px;
+            border-bottom: 0.5px solid #F1EFE8;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+        .partida:hover { background: #FAFAF7; }
+        .partida.selected { background: #FFF8E1; }
+        .partida input[type="checkbox"] {
+            margin: 2px 0 0 0;
+            flex-shrink: 0;
+            cursor: pointer;
+            width: 14px;
+            height: 14px;
+            accent-color: #0078D7;
+        }
+        .partida-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .partida-desc {
+            font-size: 11px;
+            font-weight: 500;
+            color: #2C2C2A;
+            line-height: 1.35;
+            margin-bottom: 2px;
+        }
+        .partida-meta {
+            font-size: 10px;
+            color: #888780;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .nivel-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 9px;
+            padding: 1px 5px;
+            background: #FF8C00;
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .unidad-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            flex-shrink: 0;
+            min-width: 30px;
+            text-align: center;
+            margin-top: 0;
+        }
+        .u-m3 { background: #FAEEDA; color: #854F0B; }
+        .u-m2 { background: #E1F5EE; color: #085041; }
+        .u-m { background: #E6F1FB; color: #0C447C; }
+        .u-kg { background: #FAECE7; color: #993C1D; }
+        .u-und { background: #EEEDFE; color: #3C3489; }
+        .u-glb { background: #F1EFE8; color: #5F5E5A; }
+        .footer {
+            padding: 11px 14px;
+            background: #F1EFE8;
+            border-top: 0.5px solid #D3D1C7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .footer-info {
+            font-size: 11px;
+            color: #5F5E5A;
+        }
+        .footer-info strong {
+            color: #0078D7;
+            font-size: 13px;
+        }
+        .btn-primary {
+            padding: 8px 16px;
+            background: #0078D7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.15s;
+        }
+        .btn-primary:hover { background: #0c5ca8; }
+        .btn-primary:disabled {
+            background: #B4B2A9;
+            cursor: not-allowed;
+        }
+        .loading {
+            padding: 30px 20px;
+            text-align: center;
+            color: #888780;
+            font-size: 12px;
+        }
+        .error {
+            padding: 14px;
+            margin: 10px 14px;
+            background: #FCE8E6;
+            border: 1px solid #F5C6CB;
+            color: #B71C1C;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+        .modal-overlay.visible { display: flex; }
+        .modal {
+            background: white;
+            border-radius: 8px;
+            padding: 18px;
+            max-width: 290px;
+            width: 90%;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .modal h3 {
+            font-size: 13px;
+            font-weight: 600;
+            color: #2C2C2A;
+            margin-bottom: 8px;
+        }
+        .modal p {
+            font-size: 11px;
+            color: #5F5E5A;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .modal-radio {
+            display: flex;
+            align-items: flex-start;
+            gap: 7px;
+            padding: 8px 10px;
+            border: 1px solid #D3D1C7;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .modal-radio:hover { background: #FAFAF7; }
+        .modal-radio.selected {
+            border-color: #0078D7;
+            background: #E6F1FB;
+        }
+        .modal-radio input { margin-top: 1px; flex-shrink: 0; accent-color: #0078D7; }
+        .modal-radio-label {
+            flex: 1;
+            font-size: 11px;
+            color: #2C2C2A;
+        }
+        .modal-radio-label strong { font-weight: 600; }
+        .modal-radio-label small {
+            display: block;
+            color: #888780;
+            font-size: 10px;
+            margin-top: 1px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        .modal button {
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid;
+            font-family: inherit;
+        }
+        .modal .btn-cancel {
+            background: white;
+            color: #5F5E5A;
+            border-color: #D3D1C7;
+        }
+        .modal .btn-confirm {
+            background: #0078D7;
+            color: white;
+            border-color: #0078D7;
+        }
+        .toast {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1B5E20;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast.visible { opacity: 1; }
+        .toast.error { background: #B71C1C; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Importar partidas</h1>
+        <p>Banco oficial · Norma RD 073-2010 VIVIENDA</p>
+        <span class="badge" id="versionBadge">cargando...</span>
+    </div>
+
+    <div class="seccion-titulo">Especialidad</div>
+    <div class="especialidades">
+        <div class="esp activa" data-esp="estructuras">Estructuras</div>
+        <div class="esp deshabilitada" data-esp="arquitectura">Arquitectura<span class="esp-tag">próximamente</span></div>
+        <div class="esp deshabilitada" data-esp="sanitarias">I. Sanitarias<span class="esp-tag">próximamente</span></div>
+        <div class="esp deshabilitada" data-esp="electricas">I. Eléctricas<span class="esp-tag">próximamente</span></div>
+    </div>
+
+    <div class="controles" id="controles" style="display: none;">
+        <div class="search-wrap">
+            <input type="text" id="busqueda" placeholder="Buscar... (ej: zapata, encofrado, fc=210)" />
+        </div>
+        <div class="chips" id="chips"></div>
+    </div>
+
+    <div class="lista" id="lista">
+        <div class="loading">Cargando base de datos...</div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-info">
+            <strong id="seleccionadas">0</strong> seleccionadas
+        </div>
+        <button class="btn-primary" id="btnImportar" disabled>Importar</button>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h3>Confirmar importación</h3>
+            <p id="modalMsg">Se insertarán <strong id="modalCount">0</strong> partidas a partir de la fila <strong id="modalRow">?</strong>.</p>
+            <div style="font-size: 11px; color: #5F5E5A; margin-bottom: 6px; font-weight: 500;">¿Incluir títulos padres?</div>
+            <label class="modal-radio selected" id="optSi">
+                <input type="radio" name="padres" value="si" checked />
+                <div class="modal-radio-label">
+                    <strong>Sí, agregar padres</strong>
+                    <small>Incluye OE.2 ESTRUCTURAS y categoría correspondiente arriba de cada partida</small>
+                </div>
+            </label>
+            <label class="modal-radio" id="optNo">
+                <input type="radio" name="padres" value="no" />
+                <div class="modal-radio-label">
+                    <strong>No, solo las partidas</strong>
+                    <small>Importar únicamente las partidas seleccionadas sin agregar títulos</small>
+                </div>
+            </label>
+            <div class="modal-buttons">
+                <button class="btn-cancel" id="btnCancelar">Cancelar</button>
+                <button class="btn-confirm" id="btnConfirmar">Insertar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const JSON_URL = 'https://marcelarojasinfantes-spec.github.io/metrapro-zapatas/partidas-estructuras.json';
+        
+        const NIVELES_FORMATO = {
+            1: { color: '#E81123', size: 13, bold: true,  italic: false },
+            2: { color: '#16C60C', size: 12, bold: true,  italic: false },
+            3: { color: '#0078D7', size: 12, bold: true,  italic: false },
+            4: { color: '#FF8C00', size: 11, bold: true,  italic: false },
+            5: { color: '#00B7C3', size: 11, bold: true,  italic: false },
+            6: { color: '#E3008C', size: 10, bold: true,  italic: false },
+            7: { color: '#00BCF2', size: 10, bold: false, italic: false },
+            8: { color: '#737373', size: 10, bold: false, italic: false },
+            9: { color: '#374151', size: 9,  bold: false, italic: true  }
+        };
+        
+        let baseDatos = null;
+        let filtroCategoria = 'todas';
+        let filtroBusqueda = '';
+        let seleccionadas = new Set();
+        let filaCursor = null;
+
+        Office.onReady(() => {
+            cargarBaseDatos();
+            
+            document.getElementById('busqueda').addEventListener('input', (e) => {
+                filtroBusqueda = e.target.value.toLowerCase().trim();
+                renderLista();
+            });
+            
+            document.getElementById('btnImportar').addEventListener('click', preImportar);
+            document.getElementById('btnCancelar').addEventListener('click', cerrarModal);
+            document.getElementById('btnConfirmar').addEventListener('click', confirmarImportar);
+            
+            document.querySelectorAll('.modal-radio').forEach(r => {
+                r.addEventListener('click', () => {
+                    document.querySelectorAll('.modal-radio').forEach(x => x.classList.remove('selected'));
+                    r.classList.add('selected');
+                    r.querySelector('input').checked = true;
+                });
+            });
+        });
+
+        async function cargarBaseDatos() {
+            try {
+                const res = await fetch(JSON_URL + '?t=' + Date.now());
+                if (!res.ok) throw new Error('No se pudo descargar el JSON');
+                baseDatos = await res.json();
+                
+                document.getElementById('versionBadge').textContent = `v${baseDatos.version} · ${baseDatos.partidas.length} partidas`;
+                document.getElementById('controles').style.display = 'block';
+                
+                renderChips();
+                renderLista();
+            } catch (err) {
+                document.getElementById('lista').innerHTML = `
+                    <div class="error">
+                        <strong>Error al cargar el banco:</strong><br>
+                        ${err.message}
+                    </div>
+                `;
+            }
+        }
+
+        function renderChips() {
+            const cont = document.getElementById('chips');
+            cont.innerHTML = '';
+            
+            const todas = document.createElement('span');
+            todas.className = 'chip activo';
+            todas.textContent = 'Todas';
+            todas.onclick = () => seleccionarChip('todas', todas);
+            cont.appendChild(todas);
+            
+            baseDatos.categorias.forEach(cat => {
+                const count = baseDatos.partidas.filter(p => p.categoria === cat.codigo).length;
+                const chip = document.createElement('span');
+                chip.className = 'chip';
+                chip.textContent = `${cat.codigo.replace('OE.', '')} (${count})`;
+                chip.title = cat.nombre;
+                chip.onclick = () => seleccionarChip(cat.codigo, chip);
+                cont.appendChild(chip);
+            });
+        }
+
+        function seleccionarChip(cat, elem) {
+            filtroCategoria = cat;
+            document.querySelectorAll('.chip').forEach(c => c.classList.remove('activo'));
+            elem.classList.add('activo');
+            renderLista();
+        }
+
+        function getUnidadClass(und) {
+            if (und === 'm³') return 'u-m3';
+            if (und === 'm²') return 'u-m2';
+            if (und === 'm') return 'u-m';
+            if (und === 'kg') return 'u-kg';
+            if (und === 'und' || und === 'mes') return 'u-und';
+            return 'u-glb';
+        }
+
+        function calcularNivel(codigo) {
+            const codigoLimpio = codigo.replace(/^OE\./, '');
+            const partes = codigoLimpio.split('.').filter(p => p.trim() !== '');
+            return Math.min(partes.length, 9);
+        }
+
+        function renderLista() {
+            const cont = document.getElementById('lista');
+            cont.innerHTML = '';
+            
+            let filtradas = baseDatos.partidas;
+            
+            if (filtroCategoria !== 'todas') {
+                filtradas = filtradas.filter(p => p.categoria === filtroCategoria);
+            }
+            
+            if (filtroBusqueda) {
+                filtradas = filtradas.filter(p => {
+                    const haystack = (p.descripcion + ' ' + p.codigo + ' ' + (p.palabras_clave || '') + ' ' + p.subcategoria).toLowerCase();
+                    return haystack.includes(filtroBusqueda);
+                });
+            }
+            
+            if (filtradas.length === 0) {
+                cont.innerHTML = '<div class="loading">No se encontraron partidas con ese filtro</div>';
+                return;
+            }
+            
+            const grupos = {};
+            filtradas.forEach(p => {
+                const key = p.subcategoria;
+                if (!grupos[key]) grupos[key] = [];
+                grupos[key].push(p);
+            });
+            
+            Object.keys(grupos).forEach(subcat => {
+                const partidas = grupos[subcat];
+                const cat = baseDatos.categorias.find(c => c.codigo === partidas[0].categoria);
+                
+                const header = document.createElement('div');
+                header.className = 'cat-header';
+                header.innerHTML = `
+                    <span>${cat.codigo} · ${subcat}</span>
+                    <span>
+                        <span class="count">${partidas.length}</span>
+                        <span class="toggle" data-subcat="${subcat}">marcar todos</span>
+                    </span>
+                `;
+                cont.appendChild(header);
+                
+                header.querySelector('.toggle').addEventListener('click', () => {
+                    const todasMarcadas = partidas.every(p => seleccionadas.has(p.codigo));
+                    partidas.forEach(p => {
+                        if (todasMarcadas) seleccionadas.delete(p.codigo);
+                        else seleccionadas.add(p.codigo);
+                    });
+                    renderLista();
+                });
+                
+                partidas.forEach(p => {
+                    const nivel = calcularNivel(p.codigo);
+                    const formato = NIVELES_FORMATO[nivel];
+                    const row = document.createElement('div');
+                    row.className = 'partida' + (seleccionadas.has(p.codigo) ? ' selected' : '');
+                    row.innerHTML = `
+                        <input type="checkbox" ${seleccionadas.has(p.codigo) ? 'checked' : ''} />
+                        <div class="partida-info">
+                            <div class="partida-desc">${p.descripcion}</div>
+                            <div class="partida-meta">
+                                <span>${p.codigo.replace('OE.', '')}</span>
+                                <span class="nivel-pill" style="background: ${formato.color};">N${nivel}</span>
+                            </div>
+                        </div>
+                        <span class="unidad-badge ${getUnidadClass(p.unidad)}">${p.unidad}</span>
+                    `;
+                    
+                    const checkbox = row.querySelector('input');
+                    
+                    row.addEventListener('click', (e) => {
+                        if (e.target.tagName !== 'INPUT') {
+                            checkbox.checked = !checkbox.checked;
+                        }
+                        if (checkbox.checked) {
+                            seleccionadas.add(p.codigo);
+                            row.classList.add('selected');
+                        } else {
+                            seleccionadas.delete(p.codigo);
+                            row.classList.remove('selected');
+                        }
+                        actualizarContadores();
+                    });
+                    
+                    cont.appendChild(row);
+                });
+            });
+            
+            actualizarContadores();
+        }
+
+        function actualizarContadores() {
+            document.getElementById('seleccionadas').textContent = seleccionadas.size;
+            document.getElementById('btnImportar').disabled = seleccionadas.size === 0;
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').classList.remove('visible');
+        }
+
+        async function preImportar() {
+            try {
+                await Excel.run(async (context) => {
+                    const sel = context.workbook.getActiveCell();
+                    sel.load('rowIndex');
+                    await context.sync();
+                    filaCursor = sel.rowIndex + 1;
+                });
+                
+                document.getElementById('modalCount').textContent = seleccionadas.size;
+                document.getElementById('modalRow').textContent = filaCursor;
+                document.getElementById('modal').classList.add('visible');
+            } catch (err) {
+                showToast('Error al detectar la celda activa', true);
+            }
+        }
+
+        function aplicarFormatoNivel(sheet, fila, nivel) {
+            const formato = NIVELES_FORMATO[nivel];
+            const rango = sheet.getRange(`C${fila}:D${fila}`);
+            rango.format.font.color = formato.color;
+            rango.format.font.size = formato.size;
+            rango.format.font.bold = formato.bold;
+            rango.format.font.italic = formato.italic;
+            
+            sheet.getRange(`B${fila}`).values = [[`N${nivel}`]];
+            sheet.getRange(`B${fila}`).format.font.color = '#FFFFFF';
+            sheet.getRange(`B${fila}`).format.font.size = 6;
+        }
+
+        function calcularPadres(codigoPartida) {
+            const codigoSinOE = codigoPartida.replace(/^OE\./, '');
+            const partes = codigoSinOE.split('.').filter(p => p.trim() !== '');
+            const padres = [];
+            for (let i = 1; i < partes.length; i++) {
+                padres.push(partes.slice(0, i).join('.'));
+            }
+            return padres;
+        }
+
+        function obtenerDescripcionPadre(codigoPadre, baseDatos) {
+            const codigoOE = 'OE.' + codigoPadre;
+            
+            const cat = baseDatos.categorias.find(c => c.codigo === codigoOE);
+            if (cat) return cat.nombre.toUpperCase();
+            
+            const partes = codigoPadre.split('.');
+            
+            if (partes.length === 1) {
+                if (codigoPadre === '2') return 'ESTRUCTURAS';
+                return 'ESPECIALIDAD ' + codigoPadre;
+            }
+            
+            const partidaConSubcat = baseDatos.partidas.find(p => {
+                const codSinOE = p.codigo.replace(/^OE\./, '');
+                return codSinOE.startsWith(codigoPadre + '.');
+            });
+            
+            if (partidaConSubcat && partes.length === 3) {
+                return partidaConSubcat.subcategoria.toUpperCase();
+            }
+            
+            return '';
+        }
+
+        async function confirmarImportar() {
+            const incluirPadres = document.querySelector('input[name="padres"]:checked').value === 'si';
+            cerrarModal();
+            
+            const btn = document.getElementById('btnImportar');
+            btn.disabled = true;
+            btn.textContent = 'Insertando...';
+            
+            try {
+                const partidasSelec = baseDatos.partidas
+                    .filter(p => seleccionadas.has(p.codigo))
+                    .sort((a, b) => a.codigo.localeCompare(b.codigo));
+                
+                const filasAInsertar = [];
+                const padresAgregados = new Set();
+                
+                partidasSelec.forEach(p => {
+                    if (incluirPadres) {
+                        const padres = calcularPadres(p.codigo);
+                        padres.forEach(codPadre => {
+                            if (!padresAgregados.has(codPadre)) {
+                                padresAgregados.add(codPadre);
+                                const descPadre = obtenerDescripcionPadre(codPadre, baseDatos);
+                                const nivelPadre = codPadre.split('.').length;
+                                filasAInsertar.push({
+                                    codigo: codPadre,
+                                    descripcion: descPadre,
+                                    unidad: '',
+                                    nivel: nivelPadre,
+                                    esPadre: true
+                                });
+                            }
+                        });
+                    }
+                    
+                    const codigoSinOE = p.codigo.replace(/^OE\./, '');
+                    filasAInsertar.push({
+                        codigo: codigoSinOE,
+                        descripcion: p.descripcion,
+                        unidad: p.unidad,
+                        nivel: calcularNivel(p.codigo),
+                        esPadre: false
+                    });
+                });
+                
+                await Excel.run(async (context) => {
+                    const sheet = context.workbook.worksheets.getActiveWorksheet();
+                    let r = filaCursor;
+                    
+                    for (const fila of filasAInsertar) {
+                        sheet.getRange(`C${r}`).values = [[fila.codigo]];
+                        sheet.getRange(`D${r}`).values = [[fila.descripcion]];
+                        if (fila.unidad) {
+                            sheet.getRange(`E${r}`).values = [[fila.unidad]];
+                        }
+                        aplicarFormatoNivel(sheet, r, fila.nivel);
+                        r++;
+                    }
+                    
+                    sheet.getRange(`C${filaCursor}`).select();
+                    await context.sync();
+                });
+                
+                showToast(`✓ ${filasAInsertar.length} filas insertadas (${partidasSelec.length} partidas)`);
+                
+                seleccionadas.clear();
+                renderLista();
+                
+            } catch (err) {
+                console.error(err);
+                showToast('Error: ' + err.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Importar';
+                actualizarContadores();
+            }
+        }
+
+        function showToast(msg, esError) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.className = 'toast' + (esError ? ' error visible' : ' visible');
+            setTimeout(() => { toast.classList.remove('visible'); }, 3500);
+        }
+    </script>
+</body>
+</html>
