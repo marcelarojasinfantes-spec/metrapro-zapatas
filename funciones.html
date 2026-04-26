@@ -10,12 +10,15 @@
 Office.onReady(() => {});
 
 const NIVELES = {
-    1: { color: '#0F766E', size: 12, bold: true,  italic: false },
+    1: { color: '#0F766E', size: 13, bold: true,  italic: false },
     2: { color: '#3730A3', size: 12, bold: true,  italic: false },
-    3: { color: '#EA580C', size: 11, bold: true,  italic: false },
+    3: { color: '#B45309', size: 12, bold: true,  italic: false },
     4: { color: '#9D174D', size: 11, bold: true,  italic: false },
-    5: { color: '#374151', size: 10, bold: false, italic: false },
-    6: { color: '#9CA3AF', size: 9,  bold: false, italic: true  }
+    5: { color: '#7C3AED', size: 11, bold: true,  italic: false },
+    6: { color: '#0E7490', size: 10, bold: true,  italic: false },
+    7: { color: '#65A30D', size: 10, bold: false, italic: false },
+    8: { color: '#374151', size: 10, bold: false, italic: false },
+    9: { color: '#9CA3AF', size: 9,  bold: false, italic: true  }
 };
 
 function notificarError(mensaje) {
@@ -30,7 +33,7 @@ function notificarError(mensaje) {
                     button{background:#3730A3;color:white;border:none;padding:6px 14px;border-radius:3px;font-size:11px;cursor:pointer;margin-top:10px;}
                 </style></head>
                 <body>
-                    <div class="icon">⚠</div>
+                    <div class="icon">&#9888;</div>
                     <h2>MetraPro</h2>
                     <p>${mensaje}</p>
                     <button onclick="Office.context.ui.messageParent('close')">Entendido</button>
@@ -59,26 +62,22 @@ async function aplicarNivel(numero, event) {
             event.completed();
             return;
         }
-
         await Excel.run(async (context) => {
             const sheet = context.workbook.worksheets.getActiveWorksheet();
             const cell = context.workbook.getActiveCell();
             cell.load('rowIndex');
             await context.sync();
             const r = cell.rowIndex + 1;
-
             if (r < 1) {
                 notificarError('Selecciona una fila válida primero.');
                 event.completed();
                 return;
             }
-
             const rango = sheet.getRange(`C${r}:D${r}`);
             rango.format.font.color = config.color;
             rango.format.font.size = config.size;
             rango.format.font.bold = config.bold;
             rango.format.font.italic = config.italic;
-
             await context.sync();
         });
     } catch (err) {
@@ -95,6 +94,9 @@ async function nivel3(event) { return aplicarNivel(3, event); }
 async function nivel4(event) { return aplicarNivel(4, event); }
 async function nivel5(event) { return aplicarNivel(5, event); }
 async function nivel6(event) { return aplicarNivel(6, event); }
+async function nivel7(event) { return aplicarNivel(7, event); }
+async function nivel8(event) { return aplicarNivel(8, event); }
+async function nivel9(event) { return aplicarNivel(9, event); }
 
 Office.actions.associate('nivel1', nivel1);
 Office.actions.associate('nivel2', nivel2);
@@ -102,6 +104,9 @@ Office.actions.associate('nivel3', nivel3);
 Office.actions.associate('nivel4', nivel4);
 Office.actions.associate('nivel5', nivel5);
 Office.actions.associate('nivel6', nivel6);
+Office.actions.associate('nivel7', nivel7);
+Office.actions.associate('nivel8', nivel8);
+Office.actions.associate('nivel9', nivel9);
 </script>
 </body>
 </html>
